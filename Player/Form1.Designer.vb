@@ -324,7 +324,6 @@ Partial Class Form1
         '
         '显示播放列表ToolStripMenuItem1
         '
-        Me.显示播放列表ToolStripMenuItem1.Enabled = False
         Me.显示播放列表ToolStripMenuItem1.Name = "显示播放列表ToolStripMenuItem1"
         Me.显示播放列表ToolStripMenuItem1.Size = New System.Drawing.Size(214, 22)
         Me.显示播放列表ToolStripMenuItem1.Text = "显示播放列表"

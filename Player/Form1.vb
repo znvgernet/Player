@@ -4,13 +4,10 @@ Imports System.Threading.Thread
 Imports AxWMPLib
 
 Public Class Form1
-    Public medialist() As String
-    Public itmindex As Integer = -1
-    Public looptype As Integer = 1
-    Public playistopmost As Boolean = False
+
     Public lbl As New Label
     Public lbl_1 As New Label
-    Public playlist As String = Application.StartupPath & "\Playlist.ply"
+
     Public isautoloop As Boolean = True
     Public X, Y As Integer
     Public fulldisplay As Boolean = False
@@ -49,6 +46,8 @@ Public Class Form1
                 tolastsong()
             Case "Q", "q" '停止播放
                 stopmedia()
+            Case "s", "S"
+                showsonglist()
         End Select
         'Console.WriteLine(Asc(e.KeyChar))
     End Sub
@@ -80,6 +79,8 @@ Public Class Form1
                     showorhideprogress()
                 Case 11
                     playorpausesong()
+                Case 12
+                    showsonglist()
             End Select
         End If
         MyBase.WndProc(m)
@@ -111,6 +112,18 @@ Public Class Form1
     Private Sub sethotkey(ByVal flg As String)
         '释放定义的热键
         UnRegisterHotKey(Handle, 0)
+        UnRegisterHotKey(Handle, 1) '增加音量
+        UnRegisterHotKey(Handle, 2) '减少音量
+        UnRegisterHotKey(Handle, 3) '
+        UnRegisterHotKey(Handle, 4) '
+        UnRegisterHotKey(Handle, 5) '
+        UnRegisterHotKey(Handle, 6) '
+        UnRegisterHotKey(Handle, 7) '
+        UnRegisterHotKey(Handle, 8) '
+        UnRegisterHotKey(Handle, 9) '
+        UnRegisterHotKey(Handle, 10)
+        UnRegisterHotKey(Handle, 11)
+        UnRegisterHotKey(Handle, 12)
         '注册热键ctrl + T
         Dim isResult As Boolean
         isResult = RegisterHotKey(Handle, 0, MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
@@ -125,6 +138,7 @@ Public Class Form1
         isResult = RegisterHotKey(Handle, 9, MOD_CONTROL, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
         isResult = RegisterHotKey(Handle, 10, MOD_CONTROL, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
         isResult = RegisterHotKey(Handle, 11, MOD_CONTROL, 32) '注册Ctrl+空格的组合键，播放或暂停
+        isResult = RegisterHotKey(Handle, 12, MOD_CONTROL, Asc("S"))  '注册Ctrl+S的组合键，播放或暂停
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -140,10 +154,14 @@ Public Class Form1
         UnRegisterHotKey(Handle, 9) '
         UnRegisterHotKey(Handle, 10)
         UnRegisterHotKey(Handle, 11)
+        UnRegisterHotKey(Handle, 12)
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim str As String = "E:\movie\舞出我人生4-MP4\舞出我人生4A.mp4"
+
+        sethotkey(0)
+
         Me.BackColor = Color.Black
         PictureBox3.Controls.Add(PictureBox4)
         PictureBox3.Controls.Add(PictureBox2)
@@ -214,7 +232,8 @@ Public Class Form1
             itmindex = 0
             currentsong()
         End If
-        sethotkey(0)
+
+
 
 
     End Sub
@@ -232,6 +251,7 @@ Public Class Form1
         If e.Button = Windows.Forms.MouseButtons.Left Then
             Me.Left = Me.Left + e.X - X
             Me.Top = Me.Top + e.Y - Y
+            setform2position()
         End If
     End Sub
     Private Sub LB_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs)
@@ -398,7 +418,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub getfilename(ByVal files As String)
+    Public Sub getfilename(ByVal files As String)
         Dim sp = Split(files, "\")
         Dim str As String = sp(UBound(sp)).ToString.Trim
         Dim ps = Split(str, ".")
@@ -465,7 +485,9 @@ Public Class Form1
 
     Sub tofirstsong()
         Try
+            Dim olditm As Integer = itmindex
             itmindex = 0
+            setcurrentrow(itmindex, olditm)
             'AxWindowsMediaPlayer1.Ctlcontrols.stop()
             If System.IO.File.Exists(medialist(itmindex)) Then
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
@@ -490,10 +512,12 @@ Public Class Form1
 
     Sub topresong()
         Try
+            Dim olditm As Integer = itmindex
             itmindex = itmindex - 1
             If itmindex < 0 Then
                 itmindex = UBound(medialist)
             End If
+            setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
                 'AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
@@ -517,29 +541,16 @@ Public Class Form1
         nextsong()
     End Sub
 
-    Private Sub Deleteitemfromarray(ByVal itemindex As Integer)
-        Dim n_list As New ListBox
-        n_list.Items.Clear()
-        For i As Integer = 0 To UBound(medialist)
-            If i = itemindex Then
-            Else
-                n_list.Items.Add(medialist(i))
-            End If
-        Next
-        ReDim medialist(n_list.Items.Count - 1)
-        For j As Integer = 0 To n_list.Items.Count - 1
-            medialist(j) = n_list.Items(j)
-        Next
-        itmindex = itmindex - 1
-        saveplaylisttofile()
-    End Sub
 
-    Private Sub nextsong()
+
+    Public Sub nextsong()
         Try
+            Dim olditm As Integer = itmindex
             itmindex = itmindex + 1
             If itmindex > UBound(medialist) Then
                 itmindex = 0
             End If
+            setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
@@ -617,7 +628,9 @@ Public Class Form1
 
     Sub tolastsong()
         Try
+            Dim olditm As Integer = itmindex
             itmindex = UBound(medialist)
+            setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
                 AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
@@ -687,7 +700,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub setmute(Optional mflag As Integer = 0)
+    Public Sub setmute(Optional mflag As Integer = 0)
         If 静音MToolStripMenuItem.Checked Then
             AxWindowsMediaPlayer1.settings.mute = True
             If mflag = 1 Then
@@ -750,6 +763,13 @@ Public Class Form1
         Catch ex As Exception
 
         End Try
+        Try
+            If form2show Then
+                'setform2position()
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
@@ -758,14 +778,14 @@ Public Class Form1
             If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or WMPLib.WMPPlayState.wmppsPaused Then
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
-                        Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
+                        Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & Me.Top
                         'lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     Else
-                        Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
+                        Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString ' & "|" & Me.Top
                         'lbl_1.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     End If
                 Else
-                    Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
+                    Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & Me.Top
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
             Else
@@ -906,6 +926,7 @@ Public Class Form1
             Dim lk As Double = AxWindowsMediaPlayer1.currentMedia.duration
             Dim pp As Double = kl / lk * PictureBox3.Width
             PictureBox4.Location = New System.Drawing.Point(-PictureBox4.Width + pp, 3)
+
         Catch ex As Exception
 
         End Try
@@ -933,33 +954,12 @@ Public Class Form1
         End Try
     End Sub
 
-
-
     Sub showorhideprogress()
         显示播放进度控制面板PToolStripMenuItem.Checked = Not 显示播放进度控制面板PToolStripMenuItem.Checked
         Panel1.Visible = 显示播放进度控制面板PToolStripMenuItem.Checked
     End Sub
 
-    Sub saveplaylisttofile()
-        Dim FS As New System.IO.FileStream(playlist, IO.FileMode.Create)
-        Dim Bw As New System.IO.BinaryWriter(FS, System.Text.Encoding.Unicode)
-        Dim str As String = ""
-        Try
-            For i As Integer = 0 To UBound(medialist)
-                If str = "" Then
-                    str = (medialist(i).ToString.Trim)
-                Else
-                    str = str & vbCrLf & (medialist(i).ToString.Trim)
-                End If
-            Next
-        Catch ex As Exception
-            str = ""
-        End Try
 
-        Bw.Write(str)
-        Bw.Close() '记住，操作完成后及时关闭Bw，否则可能破坏文件
-        FS.Close()
-    End Sub
 
     Function readplaylist() As String
         Try
@@ -1183,6 +1183,54 @@ Public Class Form1
         End If
     End Function
 
+    Private Sub 显示播放列表ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles 显示播放列表ToolStripMenuItem1.Click
+        '显示播放列表ToolStripMenuItem1.Checked = Not 显示播放列表ToolStripMenuItem1.Checked
+        'If 显示播放列表ToolStripMenuItem1.Checked Then
+        'Dim fm1 As New Form2
+        showsonglist()
+    End Sub
+    Private Sub showsonglist()
+        Form2.Hide()
+        Form2.FormBorderStyle = FormBorderStyle.None
+        Form2.StartPosition = FormStartPosition.Manual
+        Form2.Top = Me.Top + Me.Height - 7
+        Form2.Left = Me.Left + 8
+        Form2.Width = Me.Width - 15
+        Form2.Height = 150
+        setform2position()
+        Form2.Show(Me)
+    End Sub
+    Private Sub setform2position()
+        If form2show Then
+            Form2.Top = Me.Top + Me.Height - 7
+            Form2.Left = Me.Left + 8
+            Form2.Width = Me.Width - 15
+            Form2.Height = 150
+        End If
+    End Sub
+
+    Public Sub setcurrentrow(ByVal citm As Integer, ByVal olditm As Integer)
+        If form2show Then
+            Form2.DataGridView1.CurrentCell = Form2.DataGridView1.Rows(citm).Cells(0)
+            Form2.DataGridView1.Rows(citm).Cells(2).Value = "Playing"
+            Form2.DataGridView1.Rows(olditm).Cells(2).Value = ""
+
+            Form2.DataGridView1.Rows(citm).Cells(0).Style.ForeColor = Color.Black
+            Form2.DataGridView1.Rows(citm).Cells(1).Style.ForeColor = Color.Black
+            Form2.DataGridView1.Rows(citm).Cells(2).Style.ForeColor = Color.Black
+            Form2.DataGridView1.Rows(citm).Cells(0).Style.BackColor = Color.Orange
+            Form2.DataGridView1.Rows(citm).Cells(1).Style.BackColor = Color.Orange
+            Form2.DataGridView1.Rows(citm).Cells(2).Style.BackColor = Color.Orange
+
+            Form2.DataGridView1.Rows(olditm).Cells(0).Style.ForeColor = Color.White
+            Form2.DataGridView1.Rows(olditm).Cells(1).Style.ForeColor = Color.White
+            Form2.DataGridView1.Rows(olditm).Cells(2).Style.ForeColor = Color.White
+            Form2.DataGridView1.Rows(olditm).Cells(0).Style.BackColor = Color.Black
+            Form2.DataGridView1.Rows(olditm).Cells(1).Style.BackColor = Color.Black
+            Form2.DataGridView1.Rows(olditm).Cells(2).Style.BackColor = Color.Black
+        End If
+
+    End Sub
 
     Private Sub Panel2_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel2.MouseDown
         Select Case e.Button
@@ -1191,9 +1239,9 @@ Public Class Form1
         End Select
     End Sub
 
-
-
-
-
-
+    Private Sub Form1_LocationChanged(sender As Object, e As EventArgs) Handles Me.LocationChanged
+        If form2show Then
+            setform2position()
+        End If
+    End Sub
 End Class
