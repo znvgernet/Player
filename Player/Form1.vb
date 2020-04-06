@@ -1269,4 +1269,9 @@ Public Class Form1
             setform2position()
         End If
     End Sub
+
+    Private Sub Form1_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        On Error Resume Next
+        setform2position()
+    End Sub
 End Class

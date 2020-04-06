@@ -385,7 +385,7 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.PictureBox1)
         Me.Panel1.Controls.Add(Me.PictureBox2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 270)
+        Me.Panel1.Location = New System.Drawing.Point(0, 132)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(428, 8)
         Me.Panel1.TabIndex = 2
@@ -471,7 +471,7 @@ Partial Class Form1
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(428, 278)
+        Me.ClientSize = New System.Drawing.Size(428, 140)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.PictureBox4)
         Me.Controls.Add(Me.Panel1)
