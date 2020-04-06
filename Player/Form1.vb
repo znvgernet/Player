@@ -34,6 +34,8 @@ Public Class Form1
                 showorhideprogress()
             Case 109 'm设置或取消媒体静音
                 setkl()
+            Case 115  's显示或隐藏播放列表
+                showsonglist()
         End Select
         Select Case e.KeyChar
             Case "t", "T" '第一首
@@ -46,8 +48,6 @@ Public Class Form1
                 tolastsong()
             Case "Q", "q" '停止播放
                 stopmedia()
-            Case "s", "S"
-                showsonglist()
         End Select
         'Console.WriteLine(Asc(e.KeyChar))
     End Sub
@@ -62,9 +62,9 @@ Public Class Form1
                 Case 2
                     lowvolume()
                 Case 3
-                    fastgoorback(1)  '后退2秒
+                    fastgoorback(1)  '后退5秒
                 Case 4
-                    fastgoorback()   '前进2秒
+                    fastgoorback()   '前进5秒
                 Case 5
                     tofirstsong()
                 Case 6
@@ -92,9 +92,9 @@ Public Class Form1
             Dim m As Integer = AxWindowsMediaPlayer1.currentMedia.duration
             Select Case Int(flag)
                 Case 0
-                    k = k + 1
+                    k = k + 5
                 Case 1
-                    k = k - 1
+                    k = k - 5
             End Select
             If k >= m Then
                 k = m
@@ -129,8 +129,8 @@ Public Class Form1
         isResult = RegisterHotKey(Handle, 0, MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
         isResult = RegisterHotKey(Handle, 1, MOD_CONTROL, 38) '注册向上箭头的组合键，声音加大
         isResult = RegisterHotKey(Handle, 2, MOD_CONTROL, 40) '注册向下箭头的组合键，声音变小
-        isResult = RegisterHotKey(Handle, 3, MOD_CONTROL, 37) '注册向左箭头的组合键，后退2秒
-        isResult = RegisterHotKey(Handle, 4, MOD_CONTROL, 39) '注册向右箭头的组合键，前进2秒
+        isResult = RegisterHotKey(Handle, 3, MOD_CONTROL, 37) '注册向左箭头的组合键，后退5秒
+        isResult = RegisterHotKey(Handle, 4, MOD_CONTROL, 39) '注册向右箭头的组合键，前进5秒
         isResult = RegisterHotKey(Handle, 5, MOD_CONTROL, Asc("T")) '注册Ctrl+T的组合键，播放第一首
         isResult = RegisterHotKey(Handle, 6, MOD_CONTROL, Asc("L")) '注册Ctrl+L的组合键，播放最后一首
         isResult = RegisterHotKey(Handle, 7, MOD_CONTROL, Asc("N")) '注册Ctrl+N的组合键，播放下一首
@@ -277,6 +277,7 @@ Public Class Form1
         Next
         'If newaddcount > 0 Then
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "新加入 " & newaddcount & " 个项目到播放列表"
         Timer4.Enabled = True
         'End If
@@ -705,6 +706,7 @@ Public Class Form1
             AxWindowsMediaPlayer1.settings.mute = True
             If mflag = 1 Then
                 Timer5.Enabled = False
+                Timer4.Enabled = False
                 lbl_1.Text = "媒体静音"
                 Timer4.Enabled = True
             End If
@@ -712,6 +714,7 @@ Public Class Form1
             AxWindowsMediaPlayer1.settings.mute = False
             If mflag = 1 Then
                 Timer5.Enabled = False
+                Timer4.Enabled = False
                 lbl_1.Text = "取消媒体静音"
                 Timer4.Enabled = True
             End If
@@ -1071,6 +1074,7 @@ Public Class Form1
         End If
         AxWindowsMediaPlayer1.settings.volume = media_c_volumn
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "媒体音量 " & media_c_volumn & " "
         Timer4.Enabled = True
     End Sub
@@ -1086,6 +1090,7 @@ Public Class Form1
         End If
         AxWindowsMediaPlayer1.settings.volume = media_c_volumn
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "媒体音量 " & media_c_volumn & " "
         Timer4.Enabled = True
     End Sub
@@ -1094,6 +1099,7 @@ Public Class Form1
         media_c_volumn = 100
         AxWindowsMediaPlayer1.settings.volume = media_c_volumn
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "媒体音量 " & media_c_volumn & " "
         Timer4.Enabled = True
     End Sub
@@ -1102,6 +1108,7 @@ Public Class Form1
         media_c_volumn = 50
         AxWindowsMediaPlayer1.settings.volume = media_c_volumn
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "媒体音量 " & media_c_volumn & " "
         Timer4.Enabled = True
     End Sub
@@ -1110,6 +1117,7 @@ Public Class Form1
         media_c_volumn = 0
         AxWindowsMediaPlayer1.settings.volume = media_c_volumn
         Timer5.Enabled = False
+        Timer4.Enabled = False
         lbl_1.Text = "媒体音量 " & media_c_volumn & " "
         Timer4.Enabled = True
     End Sub
@@ -1184,21 +1192,38 @@ Public Class Form1
     End Function
 
     Private Sub 显示播放列表ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles 显示播放列表ToolStripMenuItem1.Click
-        '显示播放列表ToolStripMenuItem1.Checked = Not 显示播放列表ToolStripMenuItem1.Checked
+        显示播放列表ToolStripMenuItem1.Checked = Not 显示播放列表ToolStripMenuItem1.Checked
         'If 显示播放列表ToolStripMenuItem1.Checked Then
         'Dim fm1 As New Form2
+        'If form2show Then
+        'Form2.Dispose()
+        'Form2.Close()
+        'Else
         showsonglist()
+        'End If
+
     End Sub
     Private Sub showsonglist()
-        Form2.Hide()
-        Form2.FormBorderStyle = FormBorderStyle.None
-        Form2.StartPosition = FormStartPosition.Manual
-        Form2.Top = Me.Top + Me.Height - 7
-        Form2.Left = Me.Left + 8
-        Form2.Width = Me.Width - 15
-        Form2.Height = 150
-        setform2position()
-        Form2.Show(Me)
+        If form2show = False Then
+            Form2.Hide()
+            Form2.FormBorderStyle = FormBorderStyle.None
+            Form2.StartPosition = FormStartPosition.Manual
+            Form2.Top = Me.Top + Me.Height - 7
+            Form2.Left = Me.Left + 8
+            Form2.Width = Me.Width - 15
+            Form2.Height = 150
+            setform2position()
+
+            Form2.Show(Me)
+            form2show = True
+            Me.Focus()
+            显示播放列表ToolStripMenuItem1.Checked = True
+        Else
+            form2show = False
+            Form2.Dispose()
+            Form2.Close()
+            显示播放列表ToolStripMenuItem1.Checked = False
+        End If
     End Sub
     Private Sub setform2position()
         If form2show Then

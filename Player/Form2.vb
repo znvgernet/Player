@@ -21,7 +21,6 @@ Public Class Form2
 
         getplaylist()
         changedataviewsize()
-
     End Sub
 
     Public Sub getplaylist()
@@ -96,6 +95,7 @@ Public Class Form2
         Me.Dispose()
         Me.Close()
         form2show = False
+        Form1.显示播放列表ToolStripMenuItem1.Checked = False
     End Sub
 
     Private Sub lbl_MouseDown(sender As Object, e As MouseEventArgs)
