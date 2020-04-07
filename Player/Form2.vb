@@ -3,6 +3,7 @@ Imports System.Threading.Thread
 
 Public Class Form2
     Public X, Y As Integer
+    Public mouse_click_cell_row_index As Integer = -1
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         form2show = True
@@ -24,8 +25,8 @@ Public Class Form2
     End Sub
 
     Public Sub getplaylist()
-        If UBound(medialist) > 0 Then
-            DataGridView1.Rows.Clear()
+        DataGridView1.Rows.Clear()
+        If UBound(medialist) >= 0 Then
             For i As Integer = 0 To UBound(medialist)
                 i = DataGridView1.Rows.Add()
                 DataGridView1.Rows(i).Cells(0).Value = i + 1
@@ -148,8 +149,35 @@ Public Class Form2
         changedataviewsize()
     End Sub
 
+    Private Sub 从播放列表中删除ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 从播放列表中删除ToolStripMenuItem.Click
+        If MsgBox("是否确定要将当前选择曲目从播放列表中删除", vbYesNo + vbQuestion, "确认") = vbYes Then
+            Deleteitemfromarray(mouse_click_cell_row_index)
+        End If
+    End Sub
+
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
         Sleep(200)
         playcurrrowsong(e.RowIndex)
+    End Sub
+
+    Private Sub 清空播放列表ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 清空播放列表ToolStripMenuItem.Click
+        If MsgBox("是否确定要清空播放列表", vbYesNo + vbQuestion, "确认") = vbYes Then
+            Form1.stopmedia()
+            itmindex = -1
+            Form1.lbl.Text = "就绪..."
+            ReDim medialist(-1)
+            DataGridView1.Rows.Clear()
+            saveplaylisttofile()
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseDown
+        On Error Resume Next
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            DataGridView1.CurrentCell = DataGridView1.Rows(e.RowIndex).Cells(0)
+            mouse_click_cell_row_index = e.RowIndex
+            'Label1.Text = mouse_click_cell_row_index
+            Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+        End If
     End Sub
 End Class

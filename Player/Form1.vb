@@ -416,6 +416,9 @@ Public Class Form1
                 Me.TopMost = True
             End If
             saveplaylisttofile()
+            If form2show Then
+                Form2.getplaylist()
+            End If
         End If
     End Sub
 
@@ -778,25 +781,28 @@ Public Class Form1
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
 
         Try
-            If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or WMPLib.WMPPlayState.wmppsPaused Then
+            If AxWindowsMediaPlayer1.playState = 3 Or AxWindowsMediaPlayer1.playState = 2 Then
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
-                        Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & Me.Top
+                        Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         'lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     Else
-                        Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString ' & "|" & Me.Top
+                        Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         'lbl_1.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     End If
                 Else
-                    Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & Me.Top
+                    Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
+                End If
+                If AxWindowsMediaPlayer1.playState = 1 Then
+                    Me.Text = "" '"00:00 | 00:00"
                 End If
             Else
                 Me.Text = ""
                 'lbl_1.Text = ""
             End If
         Catch ex As Exception
-
+            Me.Text = ""
         End Try
         'Dim ka As New AudioMixerHelper
         'lbl_1.Text = ka.GetVolume()
@@ -1009,7 +1015,7 @@ Public Class Form1
 
     Private Sub Timer5_Tick(sender As Object, e As EventArgs) Handles Timer5.Tick
         Try
-            If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or WMPLib.WMPPlayState.wmppsPaused Then
+            If AxWindowsMediaPlayer1.playState = 2 Or AxWindowsMediaPlayer1.playState = 3 Then
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
                         lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
@@ -1018,6 +1024,9 @@ Public Class Form1
                     End If
                 Else
                     lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
+                End If
+                If AxWindowsMediaPlayer1.playState = 1 Then
+                    lbl_1.Text = "" ' "00:00 | 00:00"
                 End If
             Else
                 lbl_1.Text = ""
