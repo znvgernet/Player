@@ -12,6 +12,7 @@ Public Class Form2
         Panel3.Dock = DockStyle.Fill
         DataGridView1.Dock = DockStyle.Fill
 
+
         AddHandler Label1.MouseDown, AddressOf lbl_MouseDown '委托拖放数据事件
         AddHandler Label1.MouseMove, AddressOf lbl_MouseMove '委托数据处理事件
 
