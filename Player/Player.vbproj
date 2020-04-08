@@ -142,6 +142,8 @@
     <None Include="Resources\q-1.png" />
     <None Include="Resources\q-2.png" />
     <None Include="Resources\e1e.png" />
+    <None Include="Resources\q-01.png" />
+    <None Include="Resources\q-21.png" />
     <Content Include="wmp.ico" />
   </ItemGroup>
   <ItemGroup>

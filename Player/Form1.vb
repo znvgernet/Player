@@ -126,19 +126,19 @@ Public Class Form1
         UnRegisterHotKey(Handle, 12)
         '注册热键ctrl + T
         Dim isResult As Boolean
-        isResult = RegisterHotKey(Handle, 0, MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
-        isResult = RegisterHotKey(Handle, 1, MOD_CONTROL, 38) '注册向上箭头的组合键，声音加大
-        isResult = RegisterHotKey(Handle, 2, MOD_CONTROL, 40) '注册向下箭头的组合键，声音变小
-        isResult = RegisterHotKey(Handle, 3, MOD_CONTROL, 37) '注册向左箭头的组合键，后退5秒
-        isResult = RegisterHotKey(Handle, 4, MOD_CONTROL, 39) '注册向右箭头的组合键，前进5秒
-        isResult = RegisterHotKey(Handle, 5, MOD_CONTROL, Asc("T")) '注册Ctrl+T的组合键，播放第一首
-        isResult = RegisterHotKey(Handle, 6, MOD_CONTROL, Asc("L")) '注册Ctrl+L的组合键，播放最后一首
-        isResult = RegisterHotKey(Handle, 7, MOD_CONTROL, Asc("N")) '注册Ctrl+N的组合键，播放下一首
-        isResult = RegisterHotKey(Handle, 8, MOD_CONTROL, Asc("F")) '注册Ctrl+F的组合键，播放上一首
-        isResult = RegisterHotKey(Handle, 9, MOD_CONTROL, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
-        isResult = RegisterHotKey(Handle, 10, MOD_CONTROL, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
-        isResult = RegisterHotKey(Handle, 11, MOD_CONTROL, 32) '注册Ctrl+空格的组合键，播放或暂停
-        isResult = RegisterHotKey(Handle, 12, MOD_CONTROL, Asc("S"))  '注册Ctrl+S的组合键，播放或暂停
+        isResult = RegisterHotKey(Handle, 0, MOD_SHIFT, Asc("M")) '注册Ctrl+M的组合键，静音
+        isResult = RegisterHotKey(Handle, 1, MOD_SHIFT, 38) '注册向上箭头的组合键，声音加大
+        isResult = RegisterHotKey(Handle, 2, MOD_SHIFT, 40) '注册向下箭头的组合键，声音变小
+        isResult = RegisterHotKey(Handle, 3, MOD_SHIFT, 37) '注册向左箭头的组合键，后退5秒
+        isResult = RegisterHotKey(Handle, 4, MOD_SHIFT, 39) '注册向右箭头的组合键，前进5秒
+        isResult = RegisterHotKey(Handle, 5, MOD_SHIFT, Asc("T")) '注册Ctrl+T的组合键，播放第一首
+        isResult = RegisterHotKey(Handle, 6, MOD_SHIFT, Asc("L")) '注册Ctrl+L的组合键，播放最后一首
+        isResult = RegisterHotKey(Handle, 7, MOD_SHIFT, Asc("N")) '注册Ctrl+N的组合键，播放下一首
+        isResult = RegisterHotKey(Handle, 8, MOD_SHIFT, Asc("F")) '注册Ctrl+F的组合键，播放上一首
+        isResult = RegisterHotKey(Handle, 9, MOD_SHIFT, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
+        isResult = RegisterHotKey(Handle, 10, MOD_SHIFT, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
+        isResult = RegisterHotKey(Handle, 11, MOD_SHIFT, 32) '注册Ctrl+空格的组合键，播放或暂停
+        isResult = RegisterHotKey(Handle, 12, MOD_SHIFT, Asc("S"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -161,7 +161,11 @@ Public Class Form1
         Dim str As String = "E:\movie\舞出我人生4-MP4\舞出我人生4A.mp4"
 
         sethotkey(0)
-
+        'SplitContainer1.Height = 26
+        'SplitContainer1.Dock = DockStyle.Bottom
+        Panel3.Dock = DockStyle.Bottom
+        Panel2.Height = 18
+        Panel3.Height = Panel2.Height '+ Panel1.Height
         Me.BackColor = Color.Black
         PictureBox3.Controls.Add(PictureBox4)
         PictureBox3.Controls.Add(PictureBox2)
@@ -169,11 +173,12 @@ Public Class Form1
         PictureBox2.Show()
         PictureBox4.Show()
         PictureBox4.Location = New System.Drawing.Point(-PictureBox4.Width, 3)
-        Panel1.Dock = DockStyle.Bottom
+        Panel1.Dock = DockStyle.Top
         Panel2.Top = 0
         Panel2.Dock = DockStyle.Bottom
         'Panel2.Height = 20
         lbl_1.BackColor = Color.Transparent
+        lbl_1.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl_1.AutoSize = False
         lbl_1.ForeColor = Color.Gray
         lbl_1.Height = 20
@@ -187,12 +192,15 @@ Public Class Form1
 
         lbl.BackColor = Color.Transparent
         lbl.AutoSize = False
-        lbl.Height = 20
+
+        'lbl.Height = Panel2.Height
         'lbl.Location = New System.Drawing.Point(5, 5)
         lbl.ForeColor = Color.Gray
+        lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl.Font = New System.Drawing.Font(New FontFamily("宋体"), 9, FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         '"微软雅黑, 10.5pt"
         lbl.TextAlign = ContentAlignment.MiddleLeft
+
         lbl.Text = "Waiting..."
         lbl.AllowDrop = True
         AddHandler lbl.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
@@ -219,6 +227,7 @@ Public Class Form1
         'AxWindowsMediaPlayer1.URL = str
         'AxWindowsMediaPlayer1.Ctlcontrols.play()
         AxWindowsMediaPlayer1.Focus()
+        Panel4.Dock = DockStyle.Fill
         If Command() <> "" Then
             loadcommandfile(Command)
         Else
@@ -242,7 +251,8 @@ Public Class Form1
             Case Windows.Forms.MouseButtons.Left
                 X = e.X : Y = e.Y
             Case Windows.Forms.MouseButtons.Right
-                Me.ContextMenuStrip1.Show(e.X + Me.Left + 9, e.Y + Me.Top + 32)
+                'Me.ContextMenuStrip1.Show(e.X + Me.Left + 9, e.Y + Me.Top + 32)
+                Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End Select
     End Sub
 
@@ -388,7 +398,7 @@ Public Class Form1
     Private Sub AxWindowsMediaPlayer1_MouseDownEvent(sender As Object, e As AxWMPLib._WMPOCXEvents_MouseDownEvent) Handles AxWindowsMediaPlayer1.MouseDownEvent
 
         If e.nButton = 2 Then
-            Me.ContextMenuStrip1.Show(e.fX + Me.Left + 9, e.fY + Me.Top + 32)
+            Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End If
     End Sub
 
@@ -795,14 +805,14 @@ Public Class Form1
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
-                    Me.Text = "" '"00:00 | 00:00"
+                    Me.Text = "Player" '"00:00 | 00:00"
                 End If
             Else
-                Me.Text = ""
+                Me.Text = "Player"
                 'lbl_1.Text = ""
             End If
         Catch ex As Exception
-            Me.Text = ""
+            Me.Text = "Player"
         End Try
         'Dim ka As New AudioMixerHelper
         'lbl_1.Text = ka.GetVolume()
@@ -966,6 +976,11 @@ Public Class Form1
     Sub showorhideprogress()
         显示播放进度控制面板PToolStripMenuItem.Checked = Not 显示播放进度控制面板PToolStripMenuItem.Checked
         Panel1.Visible = 显示播放进度控制面板PToolStripMenuItem.Checked
+        If 显示播放进度控制面板PToolStripMenuItem.Checked Then
+            Panel3.Height = Panel2.Height + Panel1.Height
+        Else
+            Panel3.Height = Panel2.Height
+        End If
     End Sub
 
 
@@ -1269,7 +1284,8 @@ Public Class Form1
     Private Sub Panel2_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel2.MouseDown
         Select Case e.Button
             Case Windows.Forms.MouseButtons.Right
-                Me.ContextMenuStrip1.Show(e.X + Me.Left + 9, e.Y + Me.Top + 32)
+                'Me.ContextMenuStrip1.Show(e.X + Me.Left + 9, e.Y + Me.Top + 32)
+                Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End Select
     End Sub
 
@@ -1279,8 +1295,23 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
+
+    End Sub
+
     Private Sub Form1_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         On Error Resume Next
         setform2position()
     End Sub
+
+    Private Sub AxWindowsMediaPlayer1_Enter(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub Panel4_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel4.MouseDown
+        On Error Resume Next
+        Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+    End Sub
+
+
 End Class

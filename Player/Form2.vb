@@ -110,11 +110,13 @@ Public Class Form2
     End Sub
 
     Private Sub lbl_MouseMove(sender As Object, e As MouseEventArgs)
+        On Error Resume Next
         If X = e.X And Y = e.Y Then Exit Sub
         If e.Button = Windows.Forms.MouseButtons.Left Then
             Me.Left = Me.Left + e.X - X
             Me.Top = Me.Top + e.Y - Y
             setform1postion()
+            Form1.Focus()
         End If
     End Sub
 
@@ -151,7 +153,7 @@ Public Class Form2
     End Sub
 
     Private Sub 从播放列表中删除ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 从播放列表中删除ToolStripMenuItem.Click
-        If MsgBox("是否确定要将当前选择曲目从播放列表中删除", vbYesNo + vbQuestion, "确认") = vbYes Then
+        If MsgBox("是否确定要将当前选择曲目 """ & DataGridView1.Rows(mouse_click_cell_row_index).Cells(1).Value & """ 从播放列表中删除", vbYesNo + vbQuestion, "确认") = vbYes Then
             Deleteitemfromarray(mouse_click_cell_row_index)
         End If
     End Sub
@@ -180,5 +182,15 @@ Public Class Form2
             'Label1.Text = mouse_click_cell_row_index
             Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End If
+    End Sub
+
+    Private Sub Form2_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        On Error Resume Next
+        Form1.Focus()
+    End Sub
+
+    Private Sub DataGridView1_Click(sender As Object, e As EventArgs) Handles DataGridView1.Click
+        On Error Resume Next
+        Form1.Focus()
     End Sub
 End Class
