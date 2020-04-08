@@ -6,6 +6,13 @@ Public Class Form2
     Public mouse_click_cell_row_index As Integer = -1
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.BackColor = Color.FromArgb(12, 33, 60)
+        Panel1.BackColor = Color.FromArgb(12, 33, 60)
+        Panel2.BackColor = Color.FromArgb(12, 33, 60)
+        Panel3.BackColor = Color.FromArgb(12, 33, 60)
+        Me.DataGridView1.BackgroundColor = Color.FromArgb(12, 33, 60)
+        Me.DataGridView1.RowsDefaultCellStyle.BackColor = Color.FromArgb(12, 33, 60)
+        Me.DataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(12, 33, 60)
         form2show = True
         Label1.Dock = DockStyle.Fill
         Label3.Dock = DockStyle.Fill
@@ -41,9 +48,9 @@ Public Class Form2
                 End If
             Next
             DataGridView1.CurrentCell = DataGridView1.Rows(itmindex).Cells(0)
-            DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.Black
-            DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.Black
-            DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.Black
+            DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.FromArgb(12, 33, 60)
             DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.Orange
             DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.Orange
             DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.Orange
@@ -121,8 +128,14 @@ Public Class Form2
     End Sub
 
     Private Sub setform1postion()
-        Form1.Top = Me.Top - Form1.Height + 7
-        Form1.Left = Me.Left - 8
+        If Form1.窗体无框模式ToolStripMenuItem.Checked Then
+            Form1.Top = Me.Top - Form1.Height
+            Form1.Left = Me.Left
+        Else
+            Form1.Top = Me.Top - Form1.Height + 7
+            Form1.Left = Me.Left - 8
+        End If
+
     End Sub
 
     Private Sub Label2_MouseHover(sender As Object, e As EventArgs) Handles Label2.MouseHover
@@ -192,5 +205,10 @@ Public Class Form2
     Private Sub DataGridView1_Click(sender As Object, e As EventArgs) Handles DataGridView1.Click
         On Error Resume Next
         Form1.Focus()
+    End Sub
+
+    Private Sub Form2_LocationChanged(sender As Object, e As EventArgs) Handles Me.LocationChanged
+        On Error Resume Next
+        'setform1postion()
     End Sub
 End Class

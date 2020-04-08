@@ -164,9 +164,12 @@ Public Class Form1
         'SplitContainer1.Height = 26
         'SplitContainer1.Dock = DockStyle.Bottom
         Panel3.Dock = DockStyle.Bottom
+        Panel5.Dock = DockStyle.Top
         Panel2.Height = 18
+        Panel1.BackColor = Color.FromArgb(12, 33, 60)
+        Panel2.BackColor = Color.FromArgb(12, 33, 60)
         Panel3.Height = Panel2.Height '+ Panel1.Height
-        Me.BackColor = Color.Black
+        Me.BackColor = Color.FromArgb(12, 33, 60)
         PictureBox3.Controls.Add(PictureBox4)
         PictureBox3.Controls.Add(PictureBox2)
         PictureBox2.Dock = DockStyle.Right
@@ -180,7 +183,7 @@ Public Class Form1
         lbl_1.BackColor = Color.Transparent
         lbl_1.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl_1.AutoSize = False
-        lbl_1.ForeColor = Color.Gray
+        lbl_1.ForeColor = Color.White
         lbl_1.Height = 20
         lbl_1.TextAlign = ContentAlignment.MiddleRight
         lbl_1.Width = 100
@@ -195,7 +198,7 @@ Public Class Form1
 
         'lbl.Height = Panel2.Height
         'lbl.Location = New System.Drawing.Point(5, 5)
-        lbl.ForeColor = Color.Gray
+        lbl.ForeColor = Color.White
         lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl.Font = New System.Drawing.Font(New FontFamily("宋体"), 9, FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         '"微软雅黑, 10.5pt"
@@ -795,13 +798,16 @@ Public Class Form1
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
                         Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        Label1.Text = Me.Text
                         'lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     Else
                         Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        Label1.Text = Me.Text
                         'lbl_1.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     End If
                 Else
                     Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                    Label1.Text = Me.Text
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
@@ -811,8 +817,10 @@ Public Class Form1
                 Me.Text = "Player"
                 'lbl_1.Text = ""
             End If
+            Label1.Text = Me.Text
         Catch ex As Exception
             Me.Text = "Player"
+            Label1.Text = Me.Text
         End Try
         'Dim ka As New AudioMixerHelper
         'lbl_1.Text = ka.GetVolume()
@@ -1062,6 +1070,8 @@ Public Class Form1
         Else
             Me.FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
         End If
+        'Me.Panel5.Visible = 窗体无框模式ToolStripMenuItem.Checked
+        setform2position()
     End Sub
 
     Private Sub 显示播放进度控制面板PToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 显示播放进度控制面板PToolStripMenuItem.Click
@@ -1232,9 +1242,15 @@ Public Class Form1
             Form2.Hide()
             Form2.FormBorderStyle = FormBorderStyle.None
             Form2.StartPosition = FormStartPosition.Manual
-            Form2.Top = Me.Top + Me.Height - 7
-            Form2.Left = Me.Left + 8
-            Form2.Width = Me.Width - 15
+            If 窗体无框模式ToolStripMenuItem.Checked Then
+                Form2.Top = Me.Top + Me.Height
+                Form2.Left = Me.Left
+                Form2.Width = Me.Width
+            Else
+                Form2.Top = Me.Top + Me.Height - 7
+                Form2.Left = Me.Left + 8
+                Form2.Width = Me.Width - 15
+            End If
             Form2.Height = 150
             setform2position()
 
@@ -1251,10 +1267,18 @@ Public Class Form1
     End Sub
     Private Sub setform2position()
         If form2show Then
-            Form2.Top = Me.Top + Me.Height - 7
-            Form2.Left = Me.Left + 8
-            Form2.Width = Me.Width - 15
-            Form2.Height = 150
+            If 窗体无框模式ToolStripMenuItem.Checked Then
+                Form2.Top = Me.Top + Me.Height
+                Form2.Left = Me.Left
+                Form2.Width = Me.Width
+                Form2.Height = 150
+            Else
+                Form2.Top = Me.Top + Me.Height - 7
+                Form2.Left = Me.Left + 8
+                Form2.Width = Me.Width - 15
+                Form2.Height = 150
+            End If
+
         End If
     End Sub
 
@@ -1264,9 +1288,9 @@ Public Class Form1
             Form2.DataGridView1.Rows(citm).Cells(2).Value = "Playing"
             Form2.DataGridView1.Rows(olditm).Cells(2).Value = ""
 
-            Form2.DataGridView1.Rows(citm).Cells(0).Style.ForeColor = Color.Black
-            Form2.DataGridView1.Rows(citm).Cells(1).Style.ForeColor = Color.Black
-            Form2.DataGridView1.Rows(citm).Cells(2).Style.ForeColor = Color.Black
+            Form2.DataGridView1.Rows(citm).Cells(0).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            Form2.DataGridView1.Rows(citm).Cells(1).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            Form2.DataGridView1.Rows(citm).Cells(2).Style.ForeColor = Color.FromArgb(12, 33, 60)
             Form2.DataGridView1.Rows(citm).Cells(0).Style.BackColor = Color.Orange
             Form2.DataGridView1.Rows(citm).Cells(1).Style.BackColor = Color.Orange
             Form2.DataGridView1.Rows(citm).Cells(2).Style.BackColor = Color.Orange
@@ -1274,9 +1298,9 @@ Public Class Form1
             Form2.DataGridView1.Rows(olditm).Cells(0).Style.ForeColor = Color.White
             Form2.DataGridView1.Rows(olditm).Cells(1).Style.ForeColor = Color.White
             Form2.DataGridView1.Rows(olditm).Cells(2).Style.ForeColor = Color.White
-            Form2.DataGridView1.Rows(olditm).Cells(0).Style.BackColor = Color.Black
-            Form2.DataGridView1.Rows(olditm).Cells(1).Style.BackColor = Color.Black
-            Form2.DataGridView1.Rows(olditm).Cells(2).Style.BackColor = Color.Black
+            Form2.DataGridView1.Rows(olditm).Cells(0).Style.BackColor = Color.FromArgb(12, 33, 60)
+            Form2.DataGridView1.Rows(olditm).Cells(1).Style.BackColor = Color.FromArgb(12, 33, 60)
+            Form2.DataGridView1.Rows(olditm).Cells(2).Style.BackColor = Color.FromArgb(12, 33, 60)
         End If
 
     End Sub
@@ -1304,9 +1328,7 @@ Public Class Form1
         setform2position()
     End Sub
 
-    Private Sub AxWindowsMediaPlayer1_Enter(sender As Object, e As EventArgs)
 
-    End Sub
 
     Private Sub Panel4_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel4.MouseDown
         On Error Resume Next
