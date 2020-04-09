@@ -78,25 +78,27 @@ Partial Class Form1
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Timer3 = New System.Windows.Forms.Timer(Me.components)
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Timer4 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer5 = New System.Windows.Forms.Timer(Me.components)
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
-        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel5.SuspendLayout()
+        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Timer1
@@ -395,7 +397,7 @@ Partial Class Form1
         Me.Panel1.Location = New System.Drawing.Point(32, 3)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Padding = New System.Windows.Forms.Padding(0, 3, 0, 3)
+        Me.Panel1.Padding = New System.Windows.Forms.Padding(3)
         Me.Panel1.Size = New System.Drawing.Size(428, 14)
         Me.Panel1.TabIndex = 2
         '
@@ -404,9 +406,9 @@ Partial Class Form1
         Me.PictureBox3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PictureBox3.Image = Global.Player.My.Resources.Resources.e1e1
-        Me.PictureBox3.Location = New System.Drawing.Point(2, 3)
+        Me.PictureBox3.Location = New System.Drawing.Point(5, 3)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(426, 8)
+        Me.PictureBox3.Size = New System.Drawing.Size(420, 8)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox3.TabIndex = 3
         Me.PictureBox3.TabStop = False
@@ -415,7 +417,7 @@ Partial Class Form1
         '
         Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Left
         Me.PictureBox1.Image = Global.Player.My.Resources.Resources.q_011
-        Me.PictureBox1.Location = New System.Drawing.Point(0, 3)
+        Me.PictureBox1.Location = New System.Drawing.Point(3, 3)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(2, 8)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -425,7 +427,7 @@ Partial Class Form1
         'PictureBox2
         '
         Me.PictureBox2.Image = Global.Player.My.Resources.Resources.q_211
-        Me.PictureBox2.Location = New System.Drawing.Point(822, 3)
+        Me.PictureBox2.Location = New System.Drawing.Point(825, 3)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(2, 8)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -438,12 +440,21 @@ Partial Class Form1
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.Panel6)
         Me.Panel2.Location = New System.Drawing.Point(32, 11)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(3, 0, 3, 3)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.Panel2.Size = New System.Drawing.Size(264, 18)
+        Me.Panel2.Padding = New System.Windows.Forms.Padding(3, 5, 3, 3)
+        Me.Panel2.Size = New System.Drawing.Size(264, 23)
         Me.Panel2.TabIndex = 11
+        '
+        'Panel6
+        '
+        Me.Panel6.Location = New System.Drawing.Point(25, 9)
+        Me.Panel6.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Panel6.Size = New System.Drawing.Size(102, 12)
+        Me.Panel6.TabIndex = 0
         '
         'Timer4
         '
@@ -458,8 +469,8 @@ Partial Class Form1
         Me.Panel3.Controls.Add(Me.Panel1)
         Me.Panel3.Controls.Add(Me.Panel2)
         Me.Panel3.Location = New System.Drawing.Point(12, 103)
+        Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(3, 0, 3, 3)
         Me.Panel3.Size = New System.Drawing.Size(200, 35)
         Me.Panel3.TabIndex = 12
         '
@@ -482,18 +493,6 @@ Partial Class Form1
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(200, 62)
         Me.Panel4.TabIndex = 13
-        '
-        'AxWindowsMediaPlayer1
-        '
-        Me.AxWindowsMediaPlayer1.AllowDrop = True
-        Me.AxWindowsMediaPlayer1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.AxWindowsMediaPlayer1.Enabled = True
-        Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(0, 27)
-        Me.AxWindowsMediaPlayer1.Margin = New System.Windows.Forms.Padding(2)
-        Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
-        Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
-        Me.AxWindowsMediaPlayer1.TabIndex = 11
         '
         'Panel5
         '
@@ -528,6 +527,18 @@ Partial Class Form1
         Me.Label1.Text = "Label1"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'AxWindowsMediaPlayer1
+        '
+        Me.AxWindowsMediaPlayer1.AllowDrop = True
+        Me.AxWindowsMediaPlayer1.ContextMenuStrip = Me.ContextMenuStrip1
+        Me.AxWindowsMediaPlayer1.Enabled = True
+        Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(0, 27)
+        Me.AxWindowsMediaPlayer1.Margin = New System.Windows.Forms.Padding(2)
+        Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
+        Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
+        Me.AxWindowsMediaPlayer1.TabIndex = 11
+        '
         'Form1
         '
         Me.AllowDrop = True
@@ -548,11 +559,12 @@ Partial Class Form1
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel2.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
-        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel5.ResumeLayout(False)
+        CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -620,4 +632,5 @@ Partial Class Form1
     Friend WithEvents Panel5 As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
+    Friend WithEvents Panel6 As Panel
 End Class

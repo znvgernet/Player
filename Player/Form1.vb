@@ -7,7 +7,7 @@ Public Class Form1
 
     Public lbl As New Label
     Public lbl_1 As New Label
-
+    Public m_d As Boolean = False
     Public isautoloop As Boolean = True
     Public X, Y As Integer
     Public fulldisplay As Boolean = False
@@ -165,7 +165,7 @@ Public Class Form1
         'SplitContainer1.Dock = DockStyle.Bottom
         Panel3.Dock = DockStyle.Bottom
         Panel5.Dock = DockStyle.Top
-        Panel2.Height = 18
+        Panel2.Height = 25
         Panel1.BackColor = Color.FromArgb(12, 33, 60)
         Panel2.BackColor = Color.FromArgb(12, 33, 60)
         Panel3.Height = Panel2.Height '+ Panel1.Height
@@ -192,11 +192,15 @@ Public Class Form1
         AddHandler lbl_1.DragDrop, AddressOf LB_DragDrop '委托数据处理事件
         AddHandler lbl_1.MouseDown, AddressOf lbl_MouseDown '委托拖放数据事件
         AddHandler lbl_1.MouseMove, AddressOf lbl_MouseMove '委托数据处理事件
-
+        'AddHandler lbl_1.MouseMove, AddressOf lbl_MouseLeave
+        'AddHandler lbl_1.MouseMove, AddressOf lbl_MouseClick
+        'AddHandler lbl_1.MouseMove, AddressOf lbl_MouseEnter
         lbl.BackColor = Color.Transparent
         lbl.AutoSize = False
 
-        'lbl.Height = Panel2.Height
+        lbl.Height = 12
+        Dim old As Padding = lbl.Margin
+        lbl.Margin = New Padding(old.Left, old.Top, old.Right, 5)
         'lbl.Location = New System.Drawing.Point(5, 5)
         lbl.ForeColor = Color.White
         lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
@@ -210,10 +214,14 @@ Public Class Form1
         AddHandler lbl.DragDrop, AddressOf LB_DragDrop '委托数据处理事件
         AddHandler lbl.MouseDown, AddressOf lbl_MouseDown '委托拖放数据事件
         AddHandler lbl.MouseMove, AddressOf lbl_MouseMove '委托数据处理事件
-        Panel2.Controls.Add(lbl)
+        'AddHandler lbl.MouseMove, AddressOf lbl_MouseLeave
+        'AddHandler lbl.MouseMove, AddressOf lbl_MouseClick
+        'AddHandler lbl.MouseMove, AddressOf lbl_MouseEnter
+        Panel6.Dock = DockStyle.Fill
+        Panel6.Controls.Add(lbl)
         Panel2.Controls.Add(lbl_1)
         lbl_1.Dock = DockStyle.Right
-        lbl.Dock = DockStyle.Fill
+        lbl.Dock = DockStyle.Top
         Panel1.Visible = False
 
         AxWindowsMediaPlayer1.Dock = DockStyle.Fill
@@ -250,6 +258,7 @@ Public Class Form1
 
     End Sub
     Private Sub lbl_MouseDown(sender As Object, e As MouseEventArgs)
+        m_d = True
         Select Case e.Button
             Case Windows.Forms.MouseButtons.Left
                 X = e.X : Y = e.Y
@@ -259,14 +268,29 @@ Public Class Form1
         End Select
     End Sub
 
-    Private Sub lbl_MouseMove(sender As Object, e As MouseEventArgs)
-        If X = e.X And Y = e.Y Then Exit Sub
+    Private Sub lbl_MouseEnter(sender As Object, e As MouseEventArgs)
         If e.Button = Windows.Forms.MouseButtons.Left Then
+            m_d = False
+        End If
+
+    End Sub
+
+    Private Sub lbl_MouseLeave(sender As Object, e As EventArgs)
+        m_d = False
+    End Sub
+    Private Sub lbl_MouseClick(sender As Object, e As MouseEventArgs)
+        m_d = True
+    End Sub
+    Private Sub lbl_MouseMove(sender As Object, e As MouseEventArgs)
+
+        If X = e.X And Y = e.Y Then Exit Sub
+        If e.Button = Windows.Forms.MouseButtons.Left Then  'And m_d = True
             Me.Left = Me.Left + e.X - X
             Me.Top = Me.Top + e.Y - Y
             setform2position()
         End If
     End Sub
+
     Private Sub LB_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs)
         Dim klist As New ListBox
         klist.Items.Clear()
@@ -395,6 +419,8 @@ Public Class Form1
                 tolastsong()
             Case "q", "Q" '停止播放
                 stopmedia()
+            Case "s", "S" '
+                showsonglist()
         End Select
     End Sub
 
@@ -402,6 +428,8 @@ Public Class Form1
 
         If e.nButton = 2 Then
             Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+        Else
+
         End If
     End Sub
 
@@ -1248,8 +1276,8 @@ Public Class Form1
                 Form2.Width = Me.Width
             Else
                 Form2.Top = Me.Top + Me.Height - 7
-                Form2.Left = Me.Left + 8
-                Form2.Width = Me.Width - 15
+                Form2.Left = Me.Left + 7
+                Form2.Width = Me.Width - 14
             End If
             Form2.Height = 150
             setform2position()
@@ -1274,8 +1302,8 @@ Public Class Form1
                 Form2.Height = 150
             Else
                 Form2.Top = Me.Top + Me.Height - 7
-                Form2.Left = Me.Left + 8
-                Form2.Width = Me.Width - 15
+                Form2.Left = Me.Left + 7
+                Form2.Width = Me.Width - 14
                 Form2.Height = 150
             End If
 
@@ -1328,12 +1356,14 @@ Public Class Form1
         setform2position()
     End Sub
 
+    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
+
+    End Sub
+
 
 
     Private Sub Panel4_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel4.MouseDown
         On Error Resume Next
         Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
     End Sub
-
-
 End Class

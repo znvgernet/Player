@@ -133,7 +133,7 @@ Public Class Form2
             Form1.Left = Me.Left
         Else
             Form1.Top = Me.Top - Form1.Height + 7
-            Form1.Left = Me.Left - 8
+            Form1.Left = Me.Left - 7
         End If
 
     End Sub
