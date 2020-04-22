@@ -33,28 +33,33 @@ Public Class Form2
     End Sub
 
     Public Sub getplaylist()
-        DataGridView1.Rows.Clear()
-        If UBound(medialist) >= 0 Then
-            For i As Integer = 0 To UBound(medialist)
-                i = DataGridView1.Rows.Add()
-                DataGridView1.Rows(i).Cells(0).Value = i + 1
-                DataGridView1.Rows(i).Cells(1).Value = getfilename(medialist(i))
-                DataGridView1.Rows(i).Cells(1).ToolTipText = medialist(i)
-                DataGridView1.Rows(i).Cells(1).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
-                If i = itmindex Then
-                    DataGridView1.Rows(i).Cells(2).Value = "Playing"
-                Else
-                    DataGridView1.Rows(i).Cells(2).Value = ""
-                End If
-            Next
-            DataGridView1.CurrentCell = DataGridView1.Rows(itmindex).Cells(0)
-            DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.FromArgb(12, 33, 60)
-            DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.FromArgb(12, 33, 60)
-            DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.FromArgb(12, 33, 60)
-            DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.Orange
-            DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.Orange
-            DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.Orange
-        End If
+        Try
+            DataGridView1.Rows.Clear()
+            If UBound(medialist) >= 0 Then
+                For i As Integer = 0 To UBound(medialist)
+                    i = DataGridView1.Rows.Add()
+                    DataGridView1.Rows(i).Cells(0).Value = i + 1
+                    DataGridView1.Rows(i).Cells(1).Value = getfilename(medialist(i))
+                    DataGridView1.Rows(i).Cells(1).ToolTipText = medialist(i)
+                    DataGridView1.Rows(i).Cells(1).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+                    If i = itmindex Then
+                        DataGridView1.Rows(i).Cells(2).Value = "Playing"
+                    Else
+                        DataGridView1.Rows(i).Cells(2).Value = ""
+                    End If
+                Next
+                DataGridView1.CurrentCell = DataGridView1.Rows(itmindex).Cells(0)
+                DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.FromArgb(12, 33, 60)
+                DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.FromArgb(12, 33, 60)
+                DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.FromArgb(12, 33, 60)
+                DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.Orange
+                DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.Orange
+                DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.Orange
+            End If
+        Catch ex As Exception
+            'MsgBox(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub playcurrrowsong(ByVal citm As Integer)
@@ -193,6 +198,16 @@ Public Class Form2
             DataGridView1.CurrentCell = DataGridView1.Rows(e.RowIndex).Cells(0)
             mouse_click_cell_row_index = e.RowIndex
             'Label1.Text = mouse_click_cell_row_index
+            If e.RowIndex = 0 Then
+                向上移动ToolStripMenuItem.Enabled = False
+                向下移动ToolStripMenuItem.Enabled = True
+            ElseIf e.RowIndex = DataGridView1.RowCount - 1 Then
+                向上移动ToolStripMenuItem.Enabled = True
+                向下移动ToolStripMenuItem.Enabled = False
+            Else
+                向上移动ToolStripMenuItem.Enabled = True
+                向下移动ToolStripMenuItem.Enabled = True
+            End If
             Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End If
     End Sub
@@ -207,8 +222,79 @@ Public Class Form2
         Form1.Focus()
     End Sub
 
-    Private Sub Form2_LocationChanged(sender As Object, e As EventArgs) Handles Me.LocationChanged
+    Private Sub 向上移动ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 向上移动ToolStripMenuItem.Click
         On Error Resume Next
-        'setform1postion()
+        moveitemposition(mouse_click_cell_row_index, 1)
     End Sub
+
+    Private Sub 向下移动ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 向下移动ToolStripMenuItem.Click
+        On Error Resume Next
+        moveitemposition(mouse_click_cell_row_index, 2)
+    End Sub
+
+
+    Public Sub moveitemposition(ByVal itmx As Integer, ByVal directflg As Integer)
+        Dim move_song_base As String
+        Dim move_song_noth As String
+        Dim move_txt_1 As String
+        Dim move_txt_2 As String
+        Dim move_txt_3 As String
+        Dim move_txt_4 As String
+        Dim new_itx As Integer = -1
+        move_song_base = medialist(itmx)
+        'itmindex
+        Select Case directflg
+            Case 1  '向上移动
+                new_itx = itmx - 1
+            Case 2  '向下移动
+                new_itx = itmx + 1
+        End Select
+        move_song_noth = medialist(new_itx)
+        medialist(new_itx) = move_song_base
+        medialist(itmx) = move_song_noth
+
+        move_txt_1 = DataGridView1.Rows(itmx).Cells(1).Value
+        move_txt_2 = DataGridView1.Rows(itmx).Cells(1).ToolTipText
+        move_txt_3 = DataGridView1.Rows(new_itx).Cells(1).Value
+        move_txt_4 = DataGridView1.Rows(new_itx).Cells(1).ToolTipText
+
+        DataGridView1.Rows(itmx).Cells(1).Value = move_txt_3
+        DataGridView1.Rows(itmx).Cells(1).ToolTipText = move_txt_4
+        DataGridView1.Rows(new_itx).Cells(1).Value = move_txt_1
+        DataGridView1.Rows(new_itx).Cells(1).ToolTipText = move_txt_2
+
+
+        If itmx = itmindex Or new_itx = itmindex Then
+            DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.White
+            DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.White
+            DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.White
+            DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(2).Value = ""
+            If itmx = itmindex Then
+                DataGridView1.CurrentCell = DataGridView1.Rows(new_itx).Cells(0)
+                itmindex = new_itx
+            Else
+                DataGridView1.CurrentCell = DataGridView1.Rows(new_itx).Cells(0)
+                If directflg = 1 Then
+                    itmindex = itmindex + 1
+                ElseIf directflg = 2 Then
+                    itmindex = itmindex - 1
+                End If
+            End If
+            DataGridView1.Rows(itmindex).Cells(0).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(1).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(2).Style.ForeColor = Color.FromArgb(12, 33, 60)
+            DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.Orange
+            DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.Orange
+            DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.Orange
+            DataGridView1.Rows(itmindex).Cells(2).Value = "Playing"
+        End If
+        DataGridView1.CurrentCell = DataGridView1.Rows(new_itx).Cells(0)
+        DataGridView1.Refresh()
+        saveplaylisttofile()
+    End Sub
+
+
 End Class

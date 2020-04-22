@@ -53,6 +53,7 @@
     End Sub
 
     Public Sub saveplaylisttofile()
+
         Dim FS As New System.IO.FileStream(playlist, IO.FileMode.Create)
         Dim Bw As New System.IO.BinaryWriter(FS, System.Text.Encoding.Unicode)
         Dim str As String = ""

@@ -187,6 +187,7 @@ Public Class Form1
         lbl_1.Height = 20
         lbl_1.TextAlign = ContentAlignment.MiddleRight
         lbl_1.Width = 100
+
         lbl_1.AllowDrop = True
         AddHandler lbl_1.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
         AddHandler lbl_1.DragDrop, AddressOf LB_DragDrop '委托数据处理事件

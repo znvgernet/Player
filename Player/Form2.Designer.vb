@@ -43,6 +43,9 @@ Partial Class Form2
         Me.从播放列表中删除ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.清空播放列表ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.向上移动ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.向下移动ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -215,9 +218,9 @@ Partial Class Form2
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.从播放列表中删除ToolStripMenuItem, Me.ToolStripMenuItem1, Me.清空播放列表ToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.从播放列表中删除ToolStripMenuItem, Me.ToolStripMenuItem1, Me.向上移动ToolStripMenuItem, Me.向下移动ToolStripMenuItem, Me.ToolStripMenuItem2, Me.清空播放列表ToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(167, 54)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(167, 126)
         '
         '从播放列表中删除ToolStripMenuItem
         '
@@ -235,6 +238,23 @@ Partial Class Form2
         Me.清空播放列表ToolStripMenuItem.Name = "清空播放列表ToolStripMenuItem"
         Me.清空播放列表ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.清空播放列表ToolStripMenuItem.Text = "清空播放列表"
+        '
+        '向上移动ToolStripMenuItem
+        '
+        Me.向上移动ToolStripMenuItem.Name = "向上移动ToolStripMenuItem"
+        Me.向上移动ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.向上移动ToolStripMenuItem.Text = "向上移动"
+        '
+        '向下移动ToolStripMenuItem
+        '
+        Me.向下移动ToolStripMenuItem.Name = "向下移动ToolStripMenuItem"
+        Me.向下移动ToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.向下移动ToolStripMenuItem.Text = "向下移动"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(163, 6)
         '
         'Form2
         '
@@ -274,4 +294,7 @@ Partial Class Form2
     Friend WithEvents 从播放列表中删除ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As ToolStripSeparator
     Friend WithEvents 清空播放列表ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 向上移动ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 向下移动ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripSeparator
 End Class
