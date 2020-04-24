@@ -4,13 +4,14 @@
     Public looptype As Integer = 1
     Public playistopmost As Boolean = False
     Public form2show As Boolean = False
-
+    Public move_item_index As Integer = -1
     Public playlist As String = Application.StartupPath & "\Playlist.ply"
 
 
     Public Sub Deleteitemfromarray(ByVal delitemindexs As Integer)
         Dim n_list As New ListBox
         n_list.Items.Clear()
+        move_item_index = -1
         For i As Integer = 0 To UBound(medialist)
             If i = delitemindexs Then
             Else
@@ -23,6 +24,7 @@
         Next
         If delitemindexs = itmindex Then
             Form1.stopmedia()
+
             If n_list.Items.Count = 0 Then
                 itmindex = -1
                 Form1.Text = ""
@@ -57,6 +59,7 @@
         Dim FS As New System.IO.FileStream(playlist, IO.FileMode.Create)
         Dim Bw As New System.IO.BinaryWriter(FS, System.Text.Encoding.Unicode)
         Dim str As String = ""
+        Dim cr_postion As Integer = 0
         Try
             For i As Integer = 0 To UBound(medialist)
                 If str = "" Then
@@ -65,6 +68,12 @@
                     str = str & vbCrLf & (medialist(i).ToString.Trim)
                 End If
             Next
+            If Form1.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or WMPLib.WMPPlayState.wmppsPaused Then
+                cr_postion = Form1.AxWindowsMediaPlayer1.Ctlcontrols.currentPosition
+            Else
+                cr_postion = 0
+            End If
+            str = str & vbCrLf & itmindex & ":" & cr_postion
         Catch ex As Exception
             str = ""
         End Try

@@ -55,6 +55,7 @@ Public Class Form2
                 DataGridView1.Rows(itmindex).Cells(0).Style.BackColor = Color.Orange
                 DataGridView1.Rows(itmindex).Cells(1).Style.BackColor = Color.Orange
                 DataGridView1.Rows(itmindex).Cells(2).Style.BackColor = Color.Orange
+                move_item_index = itmindex
             End If
         Catch ex As Exception
             'MsgBox(ex.Message)
@@ -189,6 +190,7 @@ Public Class Form2
             ReDim medialist(-1)
             DataGridView1.Rows.Clear()
             saveplaylisttofile()
+            move_item_index = -1
         End If
     End Sub
 
@@ -208,6 +210,7 @@ Public Class Form2
                 向上移动ToolStripMenuItem.Enabled = True
                 向下移动ToolStripMenuItem.Enabled = True
             End If
+            move_item_index = e.RowIndex
             Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
         End If
     End Sub
@@ -245,8 +248,16 @@ Public Class Form2
         'itmindex
         Select Case directflg
             Case 1  '向上移动
+                If itmx = 0 Then
+                    '播放列表顶部了不能再向上移动
+                    Exit Sub
+                End If
                 new_itx = itmx - 1
             Case 2  '向下移动
+                If itmx = DataGridView1.RowCount - 1 Then
+                    '播放列表底部了不能再向下移动
+                    Exit Sub
+                End If
                 new_itx = itmx + 1
         End Select
         move_song_noth = medialist(new_itx)
@@ -296,5 +307,7 @@ Public Class Form2
         saveplaylisttofile()
     End Sub
 
-
+    Private Sub Form2_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        move_item_index = -1
+    End Sub
 End Class

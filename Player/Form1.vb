@@ -81,6 +81,14 @@ Public Class Form1
                     playorpausesong()
                 Case 12
                     showsonglist()
+                Case 13
+                    If form2show = True And Form2.DataGridView1.SelectedRows.Count = 1 Then
+                        Form2.moveitemposition(Form2.DataGridView1.CurrentRow.Index, 1)
+                    End If
+                Case 14
+                    If form2show = True And Form2.DataGridView1.SelectedRows.Count = 1 Then
+                        Form2.moveitemposition(Form2.DataGridView1.CurrentRow.Index, 2)
+                    End If
             End Select
         End If
         MyBase.WndProc(m)
@@ -124,21 +132,25 @@ Public Class Form1
         UnRegisterHotKey(Handle, 10)
         UnRegisterHotKey(Handle, 11)
         UnRegisterHotKey(Handle, 12)
+        UnRegisterHotKey(Handle, 13)
+        UnRegisterHotKey(Handle, 14)
         '注册热键ctrl + T
         Dim isResult As Boolean
-        isResult = RegisterHotKey(Handle, 0, MOD_SHIFT, Asc("M")) '注册Ctrl+M的组合键，静音
-        isResult = RegisterHotKey(Handle, 1, MOD_SHIFT, 38) '注册向上箭头的组合键，声音加大
-        isResult = RegisterHotKey(Handle, 2, MOD_SHIFT, 40) '注册向下箭头的组合键，声音变小
-        isResult = RegisterHotKey(Handle, 3, MOD_SHIFT, 37) '注册向左箭头的组合键，后退5秒
-        isResult = RegisterHotKey(Handle, 4, MOD_SHIFT, 39) '注册向右箭头的组合键，前进5秒
-        isResult = RegisterHotKey(Handle, 5, MOD_SHIFT, Asc("T")) '注册Ctrl+T的组合键，播放第一首
-        isResult = RegisterHotKey(Handle, 6, MOD_SHIFT, Asc("L")) '注册Ctrl+L的组合键，播放最后一首
-        isResult = RegisterHotKey(Handle, 7, MOD_SHIFT, Asc("N")) '注册Ctrl+N的组合键，播放下一首
-        isResult = RegisterHotKey(Handle, 8, MOD_SHIFT, Asc("F")) '注册Ctrl+F的组合键，播放上一首
-        isResult = RegisterHotKey(Handle, 9, MOD_SHIFT, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
-        isResult = RegisterHotKey(Handle, 10, MOD_SHIFT, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
-        isResult = RegisterHotKey(Handle, 11, MOD_SHIFT, 32) '注册Ctrl+空格的组合键，播放或暂停
-        isResult = RegisterHotKey(Handle, 12, MOD_SHIFT, Asc("S"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
+        isResult = RegisterHotKey(Handle, 0, MOD_ALT + MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
+        isResult = RegisterHotKey(Handle, 1, MOD_ALT + MOD_CONTROL, 38) '注册向上箭头的组合键，声音加大
+        isResult = RegisterHotKey(Handle, 2, MOD_ALT + MOD_CONTROL, 40) '注册向下箭头的组合键，声音变小
+        isResult = RegisterHotKey(Handle, 3, MOD_ALT + MOD_CONTROL, 37) '注册向左箭头的组合键，后退5秒
+        isResult = RegisterHotKey(Handle, 4, MOD_ALT + MOD_CONTROL, 39) '注册向右箭头的组合键，前进5秒
+        isResult = RegisterHotKey(Handle, 5, MOD_ALT + MOD_CONTROL, Asc("T")) '注册Ctrl+T的组合键，播放第一首
+        isResult = RegisterHotKey(Handle, 6, MOD_ALT + MOD_CONTROL, Asc("L")) '注册Ctrl+L的组合键，播放最后一首
+        isResult = RegisterHotKey(Handle, 7, MOD_ALT + MOD_CONTROL, Asc("N")) '注册Ctrl+N的组合键，播放下一首
+        isResult = RegisterHotKey(Handle, 8, MOD_ALT + MOD_CONTROL, Asc("F")) '注册Ctrl+F的组合键，播放上一首
+        isResult = RegisterHotKey(Handle, 9, MOD_ALT + MOD_CONTROL, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
+        isResult = RegisterHotKey(Handle, 10, MOD_ALT + MOD_CONTROL, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
+        isResult = RegisterHotKey(Handle, 11, MOD_ALT + MOD_CONTROL, 32) '注册Ctrl+空格的组合键，播放或暂停
+        isResult = RegisterHotKey(Handle, 12, MOD_ALT + MOD_CONTROL, Asc("S"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
+        isResult = RegisterHotKey(Handle, 13, MOD_ALT + MOD_CONTROL, Asc("E"))  '向上移动
+        isResult = RegisterHotKey(Handle, 14, MOD_ALT + MOD_CONTROL, Asc("D"))  '向下移动
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -155,6 +167,8 @@ Public Class Form1
         UnRegisterHotKey(Handle, 10)
         UnRegisterHotKey(Handle, 11)
         UnRegisterHotKey(Handle, 12)
+        UnRegisterHotKey(Handle, 13)
+        UnRegisterHotKey(Handle, 14)
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -244,20 +258,20 @@ Public Class Form1
             loadcommandfile(Command)
         Else
             Dim pls As String = readplaylist()
-            Dim mps
-            mps = Split(pls, "|")
-            ReDim medialist(UBound(mps))
-            For n As Integer = 0 To UBound(mps)
-                medialist(n) = mps(n)
-            Next
-            itmindex = 0
-            currentsong()
+            If pls <> "" Then
+                Dim mps
+                mps = Split(pls, "|")
+                ReDim medialist(UBound(mps) - 1)
+                For n As Integer = 0 To UBound(mps) - 1
+                    medialist(n) = mps(n)
+                Next
+                Dim ol = Split(mps(UBound(mps)), ":")
+                itmindex = ol(0)
+                currentsong(ol(1))
+            End If
         End If
-
-
-
-
     End Sub
+
     Private Sub lbl_MouseDown(sender As Object, e As MouseEventArgs)
         m_d = True
         Select Case e.Button
@@ -279,9 +293,11 @@ Public Class Form1
     Private Sub lbl_MouseLeave(sender As Object, e As EventArgs)
         m_d = False
     End Sub
+
     Private Sub lbl_MouseClick(sender As Object, e As MouseEventArgs)
         m_d = True
     End Sub
+
     Private Sub lbl_MouseMove(sender As Object, e As MouseEventArgs)
 
         If X = e.X And Y = e.Y Then Exit Sub
@@ -310,7 +326,6 @@ Public Class Form1
                         klist.Items.Add(s)
                         newaddcount = newaddcount + 1
                     End If
-
             End Select
         Next
         'If newaddcount > 0 Then
@@ -326,12 +341,16 @@ Public Class Form1
         '将拖入的曲目设置为当前待播放曲目
         itmindex = kl + 1
         currentsong()
+        If form2show = True Then
+            Form2.getplaylist()
+        End If
         saveplaylisttofile()
     End Sub
 
     Private Sub LB_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs)
         e.Effect = DragDropEffects.Link '接受拖放数据，启用拖放效果
     End Sub
+
     Sub loadcommandfile(ByVal str As String)
         Dim mp() = Split(str, Chr(34))
         Dim mps()
@@ -433,8 +452,6 @@ Public Class Form1
 
         End If
     End Sub
-
-
 
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
         OpenFileDialog1.FileName = ""
@@ -587,8 +604,6 @@ Public Class Form1
         nextsong()
     End Sub
 
-
-
     Public Sub nextsong()
         Try
             Dim olditm As Integer = itmindex
@@ -613,10 +628,13 @@ Public Class Form1
 
         End Try
     End Sub
-    Private Sub currentsong()
+
+    Private Sub currentsong(Optional cp As Integer = 0)
         Try
             AxWindowsMediaPlayer1.URL = medialist(itmindex)
+
             If System.IO.File.Exists(medialist(itmindex)) Then
+                AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = cp
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
                 getfilename(medialist(itmindex))
@@ -930,6 +948,7 @@ Public Class Form1
         '    End If
         'End If
     End Sub
+
     Private Sub AxWindowsMediaPlayer1_OpenStateChange(sender As Object, e As AxWMPLib._WMPOCXEvents_OpenStateChangeEvent) Handles AxWindowsMediaPlayer1.OpenStateChange
 
         'Me.Text = e.newState
@@ -1020,8 +1039,6 @@ Public Class Form1
         End If
     End Sub
 
-
-
     Function readplaylist() As String
         Try
             Dim fs As New System.IO.FileStream(playlist, IO.FileMode.Open)
@@ -1043,7 +1060,6 @@ Public Class Form1
             readplaylist = ""
         End Try
     End Function
-
 
     Private Sub setformposition()
         Try
@@ -1197,7 +1213,6 @@ Public Class Form1
         setloop(2)
     End Sub
 
-
     'Private Sub Form1_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
     '    e.Effect = DragDropEffects.Link '接受拖放数据，启用拖放效果
     'End Sub
@@ -1266,6 +1281,7 @@ Public Class Form1
         'End If
 
     End Sub
+
     Private Sub showsonglist()
         If form2show = False Then
             Form2.Hide()
@@ -1294,6 +1310,7 @@ Public Class Form1
             显示播放列表ToolStripMenuItem1.Checked = False
         End If
     End Sub
+
     Private Sub setform2position()
         If form2show Then
             If 窗体无框模式ToolStripMenuItem.Checked Then
@@ -1361,10 +1378,13 @@ Public Class Form1
 
     End Sub
 
-
-
     Private Sub Panel4_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel4.MouseDown
         On Error Resume Next
         Me.ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+    End Sub
+
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        On Error Resume Next
+        saveplaylisttofile()
     End Sub
 End Class
