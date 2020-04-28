@@ -74,6 +74,11 @@ Public Class Form2
             If System.IO.File.Exists(medialist(itmindex)) Then
                 Form1.AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 Form1.AxWindowsMediaPlayer1.Ctlcontrols.play()
+                If Form1.停止循环ToolStripMenuItem.Checked = True Then
+                    Form1.isautoloop = False
+                Else
+                    Form1.isautoloop = True
+                End If
                 Form1.setmute()
                 Form1.getfilename(medialist(itmindex))
                 If playistopmost Then

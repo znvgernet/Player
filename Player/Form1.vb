@@ -320,7 +320,7 @@ Public Class Form1
             '添加到表
             Dim testFile As New System.IO.FileInfo(s)
             Select Case UCase(testFile.Extension)
-                Case ".MP3", ".MP4", ".WMV", ".MPG", ".MPEG", ".MOV", ".AVI", ".RM", ".RMVB", ".RMB", ".MKV", ".WAV", ".WMA", ".DAT"
+                Case ".MP3", ".M4A", ".MP4", ".WMV", ".MPG", ".MPEG", ".MOV", ".AVI", ".RM", ".RMVB", ".RMB", ".MKV", ".WAV", ".WMA", ".DAT"
                     If checkrepeat(s) Then
                     Else
                         klist.Items.Add(s)
@@ -514,7 +514,11 @@ Public Class Form1
             Else
                 AxWindowsMediaPlayer1.Ctlcontrols.pause()
             End If
-            isautoloop = True
+            If 停止循环ToolStripMenuItem.Checked = True Then
+                isautoloop = False
+            Else
+                isautoloop = True
+            End If
         Catch ex As Exception
             AxWindowsMediaPlayer1.settings.setMode("", True)
         End Try
@@ -615,6 +619,11 @@ Public Class Form1
             If System.IO.File.Exists(medialist(itmindex)) Then
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
+                If 停止循环ToolStripMenuItem.Checked = True Then
+                    isautoloop = False
+                Else
+                    isautoloop = True
+                End If
                 setmute()
                 getfilename(medialist(itmindex))
                 If playistopmost Then
@@ -790,17 +799,30 @@ Public Class Form1
                 单曲循环ToolStripMenuItem.Checked = True
                 有序循环ToolStripMenuItem1.Checked = False
                 无序训话ToolStripMenuItem.Checked = False
+                停止循环ToolStripMenuItem.Checked = False
+                isautoloop = True
                 looptype = 0
             Case 1
                 单曲循环ToolStripMenuItem.Checked = False
                 有序循环ToolStripMenuItem1.Checked = True
                 无序训话ToolStripMenuItem.Checked = False
+                停止循环ToolStripMenuItem.Checked = False
+                isautoloop = True
                 looptype = 1
             Case 2
                 单曲循环ToolStripMenuItem.Checked = False
                 有序循环ToolStripMenuItem1.Checked = False
                 无序训话ToolStripMenuItem.Checked = True
+                停止循环ToolStripMenuItem.Checked = False
+                isautoloop = True
                 looptype = 2
+            Case 3
+                单曲循环ToolStripMenuItem.Checked = False
+                有序循环ToolStripMenuItem1.Checked = False
+                无序训话ToolStripMenuItem.Checked = False
+                停止循环ToolStripMenuItem.Checked = True
+                isautoloop = False
+                looptype = 3
         End Select
     End Sub
 
@@ -858,20 +880,55 @@ Public Class Form1
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
-                    Me.Text = "Player" '"00:00 | 00:00"
+                    Me.Text = "Player" & "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
                 End If
+                Label1.Text = Me.Text
             Else
-                Me.Text = "Player"
-                'lbl_1.Text = ""
+                Me.Text = "Player" '& "|" & AxWindowsMediaPlayer1.playState
+                showplaystatestr(Label1)
             End If
-            Label1.Text = Me.Text
+
         Catch ex As Exception
-            Me.Text = "Player"
-            Label1.Text = Me.Text
+            Me.Text = "Player" '& "|" & AxWindowsMediaPlayer1.playState
+            'Label1.Text = AxWindowsMediaPlayer1.playState
+            showplaystatestr(Label1)
         End Try
         'Dim ka As New AudioMixerHelper
         'lbl_1.Text = ka.GetVolume()
         'lbl_1.Text = medialist.LongLength
+    End Sub
+
+    Public Sub showplaystatestr(ByVal lbl As Label)
+        Select Case AxWindowsMediaPlayer1.playState
+            Case 0
+                lbl.Text = "未定义状态"
+            Case 1
+                lbl.Text = "停止"
+            Case 2
+                lbl.Text = "暂停"
+            Case 3
+                lbl.Text = "播放"
+            Case 4
+                lbl.Text = "ScanForward"
+            Case 5
+                lbl.Text = "ScanReverse"
+            Case 6
+                lbl.Text = "Buffering"
+            Case 7
+                lbl.Text = "Waiting"
+            Case 8
+                lbl.Text = "MediaEnded"
+            Case 9
+                lbl.Text = "Transitioning"
+            Case 10
+                lbl.Text = "Ready"
+            Case 11
+                lbl.Text = "Reconnecting"
+            Case 12
+                lbl.Text = "Last"
+            Case Else
+                lbl.Text = "未知"
+        End Select
     End Sub
 
     Private Sub 始终置顶ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 始终置顶ToolStripMenuItem.Click
@@ -1384,6 +1441,15 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        On Error Resume Next
+        saveplaylisttofile()
+    End Sub
+
+    Private Sub 停止循环ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 停止循环ToolStripMenuItem.Click
+        setloop(3)
+    End Sub
+
+    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         On Error Resume Next
         saveplaylisttofile()
     End Sub
