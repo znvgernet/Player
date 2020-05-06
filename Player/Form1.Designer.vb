@@ -43,6 +43,8 @@ Partial Class Form1
         Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripSeparator()
         Me.有序循环ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.无序训话ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripSeparator()
+        Me.停止循环ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem()
         Me.静音MToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -87,9 +89,10 @@ Partial Class Form1
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripSeparator()
+        Me.通透模式ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
-        Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripSeparator()
-        Me.停止循环ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.显示状态栏ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -203,27 +206,38 @@ Partial Class Form1
         '单曲循环ToolStripMenuItem
         '
         Me.单曲循环ToolStripMenuItem.Name = "单曲循环ToolStripMenuItem"
-        Me.单曲循环ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.单曲循环ToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
         Me.单曲循环ToolStripMenuItem.Text = "单曲循环"
         '
         'ToolStripMenuItem14
         '
         Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(115, 6)
         '
         '有序循环ToolStripMenuItem1
         '
         Me.有序循环ToolStripMenuItem1.Checked = True
         Me.有序循环ToolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.有序循环ToolStripMenuItem1.Name = "有序循环ToolStripMenuItem1"
-        Me.有序循环ToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.有序循环ToolStripMenuItem1.Size = New System.Drawing.Size(118, 22)
         Me.有序循环ToolStripMenuItem1.Text = "有序循环"
         '
         '无序训话ToolStripMenuItem
         '
         Me.无序训话ToolStripMenuItem.Name = "无序训话ToolStripMenuItem"
-        Me.无序训话ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.无序训话ToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
         Me.无序训话ToolStripMenuItem.Text = "无序循环"
+        '
+        'ToolStripMenuItem15
+        '
+        Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
+        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(115, 6)
+        '
+        '停止循环ToolStripMenuItem
+        '
+        Me.停止循环ToolStripMenuItem.Name = "停止循环ToolStripMenuItem"
+        Me.停止循环ToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
+        Me.停止循环ToolStripMenuItem.Text = "停止循环"
         '
         'ToolStripMenuItem5
         '
@@ -322,7 +336,7 @@ Partial Class Form1
         '
         '显示播放列表ToolStripMenuItem
         '
-        Me.显示播放列表ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.窗体无框模式ToolStripMenuItem, Me.ToolStripMenuItem11, Me.显示播放进度控制面板PToolStripMenuItem, Me.显示播放列表ToolStripMenuItem1})
+        Me.显示播放列表ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.窗体无框模式ToolStripMenuItem, Me.ToolStripMenuItem11, Me.显示状态栏ToolStripMenuItem, Me.显示播放进度控制面板PToolStripMenuItem, Me.显示播放列表ToolStripMenuItem1, Me.ToolStripMenuItem16, Me.通透模式ToolStripMenuItem})
         Me.显示播放列表ToolStripMenuItem.Name = "显示播放列表ToolStripMenuItem"
         Me.显示播放列表ToolStripMenuItem.Size = New System.Drawing.Size(225, 22)
         Me.显示播放列表ToolStripMenuItem.Text = "显示"
@@ -544,6 +558,17 @@ Partial Class Form1
         Me.Label1.Text = "Label1"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'ToolStripMenuItem16
+        '
+        Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
+        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(276, 6)
+        '
+        '通透模式ToolStripMenuItem
+        '
+        Me.通透模式ToolStripMenuItem.Name = "通透模式ToolStripMenuItem"
+        Me.通透模式ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
+        Me.通透模式ToolStripMenuItem.Text = "通透模式"
+        '
         'AxWindowsMediaPlayer1
         '
         Me.AxWindowsMediaPlayer1.AllowDrop = True
@@ -556,16 +581,13 @@ Partial Class Form1
         Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
         Me.AxWindowsMediaPlayer1.TabIndex = 11
         '
-        'ToolStripMenuItem15
+        '显示状态栏ToolStripMenuItem
         '
-        Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(149, 6)
-        '
-        '停止循环ToolStripMenuItem
-        '
-        Me.停止循环ToolStripMenuItem.Name = "停止循环ToolStripMenuItem"
-        Me.停止循环ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.停止循环ToolStripMenuItem.Text = "停止循环"
+        Me.显示状态栏ToolStripMenuItem.Checked = True
+        Me.显示状态栏ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.显示状态栏ToolStripMenuItem.Name = "显示状态栏ToolStripMenuItem"
+        Me.显示状态栏ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
+        Me.显示状态栏ToolStripMenuItem.Text = "显示状态栏"
         '
         'Form1
         '
@@ -578,6 +600,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.PictureBox4)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Player"
@@ -663,4 +686,7 @@ Partial Class Form1
     Friend WithEvents Panel6 As Panel
     Friend WithEvents ToolStripMenuItem15 As ToolStripSeparator
     Friend WithEvents 停止循环ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem16 As ToolStripSeparator
+    Friend WithEvents 通透模式ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 显示状态栏ToolStripMenuItem As ToolStripMenuItem
 End Class

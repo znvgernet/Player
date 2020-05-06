@@ -89,6 +89,15 @@ Public Class Form1
                     If form2show = True And Form2.DataGridView1.SelectedRows.Count = 1 Then
                         Form2.moveitemposition(Form2.DataGridView1.CurrentRow.Index, 2)
                     End If
+                Case 15
+                    通透模式ToolStripMenuItem.Checked = Not 通透模式ToolStripMenuItem.Checked
+                    If 通透模式ToolStripMenuItem.Checked = True Then
+                        Me.TransparencyKey = Color.Black
+                    Else
+                        Me.TransparencyKey = Nothing
+                    End If
+                Case 16
+                    showorhidestatusbar()
             End Select
         End If
         MyBase.WndProc(m)
@@ -134,6 +143,8 @@ Public Class Form1
         UnRegisterHotKey(Handle, 12)
         UnRegisterHotKey(Handle, 13)
         UnRegisterHotKey(Handle, 14)
+        UnRegisterHotKey(Handle, 15)
+        UnRegisterHotKey(Handle, 16)
         '注册热键ctrl + T
         Dim isResult As Boolean
         isResult = RegisterHotKey(Handle, 0, MOD_ALT + MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
@@ -151,6 +162,8 @@ Public Class Form1
         isResult = RegisterHotKey(Handle, 12, MOD_ALT + MOD_CONTROL, Asc("S"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
         isResult = RegisterHotKey(Handle, 13, MOD_ALT + MOD_CONTROL, Asc("E"))  '向上移动
         isResult = RegisterHotKey(Handle, 14, MOD_ALT + MOD_CONTROL, Asc("D"))  '向下移动
+        isResult = RegisterHotKey(Handle, 15, MOD_ALT + MOD_CONTROL, Asc("U"))  '
+        isResult = RegisterHotKey(Handle, 16, MOD_ALT + MOD_CONTROL, Asc("I"))  '
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -1010,6 +1023,9 @@ Public Class Form1
 
         'Me.Text = e.newState
         If AxWindowsMediaPlayer1.currentMedia.imageSourceHeight > 0 Then
+            If 通透模式ToolStripMenuItem.Checked Then
+                Me.TransparencyKey = Nothing
+            End If
             If e.newState = 13 Then
                 'Debug.Print("playing")
                 'AxWindowsMediaPlayer1.Controls.SetChildIndex(lbl, 1)
@@ -1038,7 +1054,9 @@ Public Class Form1
             End If
 
         Else
-
+            If 通透模式ToolStripMenuItem.Checked Then
+                Me.TransparencyKey = Color.Black
+            End If
             If (Me.Height <> 134 And Me.Width <> 315) Then
                 Me.Height = 134
                 Me.Width = 315
@@ -1090,9 +1108,17 @@ Public Class Form1
         显示播放进度控制面板PToolStripMenuItem.Checked = Not 显示播放进度控制面板PToolStripMenuItem.Checked
         Panel1.Visible = 显示播放进度控制面板PToolStripMenuItem.Checked
         If 显示播放进度控制面板PToolStripMenuItem.Checked Then
-            Panel3.Height = Panel2.Height + Panel1.Height
+            If 显示状态栏ToolStripMenuItem.Checked Then
+                Panel3.Height = Panel2.Height + Panel1.Height
+            Else
+                Panel3.Height = Panel1.Height
+            End If
         Else
-            Panel3.Height = Panel2.Height
+            If 显示状态栏ToolStripMenuItem.Checked Then
+                Panel3.Height = Panel2.Height
+            Else
+                Panel3.Height = 0
+            End If
         End If
     End Sub
 
@@ -1447,6 +1473,37 @@ Public Class Form1
 
     Private Sub 停止循环ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 停止循环ToolStripMenuItem.Click
         setloop(3)
+    End Sub
+
+    Private Sub 通透模式ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 通透模式ToolStripMenuItem.Click
+        通透模式ToolStripMenuItem.Checked = Not 通透模式ToolStripMenuItem.Checked
+        If 通透模式ToolStripMenuItem.Checked = True Then
+            Me.TransparencyKey = Color.Black
+        Else
+            Me.TransparencyKey = Nothing
+        End If
+    End Sub
+
+    Private Sub 显示状态栏ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 显示状态栏ToolStripMenuItem.Click
+        showorhidestatusbar()
+    End Sub
+
+    Sub showorhidestatusbar()
+        显示状态栏ToolStripMenuItem.Checked = Not 显示状态栏ToolStripMenuItem.Checked
+        Panel2.Visible = 显示状态栏ToolStripMenuItem.Checked
+        If 显示状态栏ToolStripMenuItem.Checked Then
+            If 显示播放进度控制面板PToolStripMenuItem.Checked Then
+                Panel3.Height = Panel2.Height + Panel1.Height
+            Else
+                Panel3.Height = Panel1.Height
+            End If
+        Else
+            If 显示播放进度控制面板PToolStripMenuItem.Checked Then
+                Panel3.Height = Panel1.Height
+            Else
+                Panel3.Height = 0
+            End If
+        End If
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
