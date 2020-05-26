@@ -593,6 +593,7 @@ Public Class Form1
     Sub topresong()
         Try
             Dim olditm As Integer = itmindex
+            Dim newitm As Integer = -1
             itmindex = itmindex - 1
             If itmindex < 0 Then
                 itmindex = UBound(medialist)
@@ -621,10 +622,15 @@ Public Class Form1
         nextsong()
     End Sub
 
-    Public Sub nextsong()
+    Public Sub nextsong(Optional songindx As Integer = -1)
         Try
             Dim olditm As Integer = itmindex
-            itmindex = itmindex + 1
+            Dim newitm As Integer = -1
+            If songindx = -1 Then
+                itmindex = itmindex + 1
+            Else
+                itmindex = songindx
+            End If
             If itmindex > UBound(medialist) Then
                 itmindex = 0
             End If
@@ -643,18 +649,23 @@ Public Class Form1
                     Me.TopMost = True
                 End If
             Else
+                If itmindex = UBound(medialist) Then
+                    newitm = 0
+                Else
+                    newitm = itmindex
+                End If
                 Deleteitemfromarray(itmindex)
-                nextsong()
+                nextsong(newitm)
             End If
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Private Sub currentsong(Optional cp As Integer = 0)
+    Private Sub currentsong(Optional cp As Integer = 0, Optional newit As Integer = -1)
         Try
             AxWindowsMediaPlayer1.URL = medialist(itmindex)
-
+            Dim newitm As Integer = -1
             If System.IO.File.Exists(medialist(itmindex)) Then
                 AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = cp
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
@@ -664,8 +675,13 @@ Public Class Form1
                     Me.TopMost = True
                 End If
             Else
+                If itmindex = UBound(medialist) Then
+                    newitm = 0
+                Else
+                    newitm = itmindex
+                End If
                 Deleteitemfromarray(itmindex)
-                currentsong()
+                currentsong(, newitm)
             End If
 
         Catch ex As Exception
@@ -893,11 +909,11 @@ Public Class Form1
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
-                    Me.Text = "Player" & "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
+                    Me.Text = "Player" & "|" & isautoloop  '& "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
                 End If
                 Label1.Text = Me.Text
             Else
-                Me.Text = "Player" '& "|" & AxWindowsMediaPlayer1.playState
+                Me.Text = "Player" & "|" & isautoloop '& "|" & AxWindowsMediaPlayer1.playState
                 showplaystatestr(Label1)
             End If
 
