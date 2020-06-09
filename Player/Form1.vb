@@ -2,6 +2,9 @@
 Imports System.Threading
 Imports System.Threading.Thread
 Imports AxWMPLib
+Imports System.IO
+Imports System.Text.RegularExpressions
+
 
 Public Class Form1
 
@@ -13,6 +16,10 @@ Public Class Form1
     Public fulldisplay As Boolean = False
     Public formtominstate As Boolean = False
     Public media_c_volumn As Integer = 100
+    Public offset_value As Integer = 0
+    Public Current_play_name As String = ""
+    Public is_show_lrc As Boolean = False
+    Public lrc_array(,) As String
 
     '===================================
     Public Const WM_HOTKEY = &H312
@@ -508,10 +515,12 @@ Public Class Form1
         Next
         If Trim(rts) & "" = "" Then
             lbl.Text = "就绪..."
+            Current_play_name = ""
         Else
             lbl.Text = rts
+            Current_play_name = rts
         End If
-
+        Show_lrc()
     End Sub
 
     Private Sub 播放暂停ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 播放暂停ToolStripMenuItem.Click
@@ -895,25 +904,38 @@ Public Class Form1
             If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or WMPLib.WMPPlayState.wmppsPaused Then
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
-                        Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        If is_show_lrc Then
+                            Me.Text = Current_play_name & " | 00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        Else
+                            Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        End If
+
                         Label1.Text = Me.Text
                         'lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     Else
-                        Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        If is_show_lrc Then
+                            Me.Text = Current_play_name & " | 00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        Else
+                            Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        End If
                         Label1.Text = Me.Text
                         'lbl_1.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     End If
                 Else
-                    Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                    If is_show_lrc Then
+                        Me.Text = Current_play_name & " | " & AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                    Else
+                        Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                    End If
                     Label1.Text = Me.Text
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
-                    Me.Text = "Player" & "|" & isautoloop  '& "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
+                    Me.Text = "Player" '& "|" & isautoloop  '& "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
                 End If
                 Label1.Text = Me.Text
             Else
-                Me.Text = "Player" & "|" & isautoloop '& "|" & AxWindowsMediaPlayer1.playState
+                Me.Text = "Player" '& "|" & isautoloop '& "|" & AxWindowsMediaPlayer1.playState
                 showplaystatestr(Label1)
             End If
 
@@ -1525,5 +1547,103 @@ Public Class Form1
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         On Error Resume Next
         saveplaylisttofile()
+    End Sub
+
+
+
+    Private Sub Show_lrc()
+        Dim m_str = Split(medialist(itmindex), ".")
+        Dim l_str As String = m_str(UBound(m_str) - 1) & ".lrc"
+        Dim line As String = ""
+        If System.IO.File.Exists(l_str) Then
+            'TextBox1.Text = ""
+            'TextBox2.Text = ""
+            Dim sr As StreamReader = New StreamReader(l_str, System.Text.Encoding.UTF8)
+            Dim rgx As Regex = New Regex("^\[[0-9]")
+            Dim rgx1 As Regex = New Regex("^\[[a-zA-Z]")
+            Dim kl
+            Dim lrc_str As String = ""
+            Dim line_count As Integer = -1
+            Dim tmp_1 As String = ""
+            Dim tmp
+            offset_value = 0
+            Do While sr.Peek() > 0
+                line = sr.ReadLine
+                If Trim(line & "") <> "" Then
+                    '歌曲信息部分，包括offset
+                    If rgx1.Match(line).Success Then
+                        'pianyi
+                        kl = Split(line, "]")
+                        tmp_1 = Replace(kl(0), "[", "")
+                        tmp = tmp_1.Split(":")
+                        Select Case LCase(tmp(0) & "")
+                            Case "offset"
+                                offset_value = tmp(1) / 1000
+                        End Select
+                    End If
+                    '歌词部分
+                    If rgx.Match(line).Success Then
+                        kl = Split(line, "]")
+                        line_count = line_count + 1
+                        For i As Integer = 0 To UBound(kl) - 1
+                            If lrc_str = "" Then
+                                lrc_str = lrc_str & Replace(kl(i), "[", "") & "[xhb]" & kl(UBound(kl))
+                            Else
+                                lrc_str = lrc_str & vbCrLf & Replace(kl(i), "[", "") & "[xhb]" & kl(UBound(kl))
+                            End If
+                        Next
+                    End If
+                End If
+            Loop
+            sr.Close()
+            sr = Nothing
+            'ReDim lrc_array(line_count, 1)
+            Dim pl = Split(lrc_str, vbCrLf)
+            Dim op
+
+            ReDim lrc_array(UBound(pl), 1)
+            For j As Integer = 0 To UBound(pl)
+                op = Split(pl(j), "[xhb]")
+                lrc_array(j, 0) = op(0)
+                lrc_array(j, 1) = op(1)
+            Next
+            If line_count > 0 Then
+                is_show_lrc = True
+                Timer6.Enabled = True
+            End If
+            'MsgBox(line_count & "/" & UBound(pl) & "/" & lrc_array.Length)
+        Else
+            Timer6.Enabled = False
+            is_show_lrc = False
+        End If
+    End Sub
+
+    Private Sub Timer6_Tick(sender As Object, e As EventArgs) Handles Timer6.Tick
+        If is_show_lrc Then
+            If Me.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Then
+                start_show_lrc(lrc_array, Math.Round(AxWindowsMediaPlayer1.Ctlcontrols.currentPosition, 2))
+            End If
+        End If
+    End Sub
+
+    Private Sub start_show_lrc(ByVal lrc_ary As Array, ByVal cnt As Integer)
+        Dim kl
+        Dim mm
+        Dim c_t_in As Integer = 0
+        For i As Integer = 0 To (lrc_ary.Length / 2 - 1)
+            kl = Split(lrc_ary(i, 0), ".")
+            mm = Split(kl(0), ":")
+            Select Case UBound(mm)
+                Case 1
+                    c_t_in = Int(mm(0)) * 60 + Int(mm(1)) + (kl(UBound(kl)) / 100)
+                Case 2
+                    c_t_in = Int(mm(0)) * 3600 + Int(mm(1)) * 60 + Int(mm(2)) + (kl(UBound(kl)) / 100)
+            End Select
+            c_t_in = c_t_in + offset_value
+            If CInt(c_t_in) = CInt(cnt) Then
+                lbl.Text = lrc_ary(i, 1)
+                Exit For
+            End If
+        Next
     End Sub
 End Class
