@@ -1630,6 +1630,7 @@ Public Class Form1
         Dim kl
         Dim mm
         Dim c_t_in As Integer = 0
+        Dim a_info As String = ""
         For i As Integer = 0 To (lrc_ary.Length / 2 - 1)
             kl = Split(lrc_ary(i, 0), ".")
             mm = Split(kl(0), ":")
@@ -1640,10 +1641,13 @@ Public Class Form1
                     c_t_in = Int(mm(0)) * 3600 + Int(mm(1)) * 60 + Int(mm(2)) + (kl(UBound(kl)) / 100)
             End Select
             c_t_in = c_t_in + offset_value
-            If CInt(c_t_in) = CInt(cnt) Then
-                lbl.Text = lrc_ary(i, 1)
-                Exit For
+            If (c_t_in) = (cnt) Then
+                a_info = lrc_ary(i, 1)
+                'Exit For
             End If
         Next
+        If a_info <> "" Then
+            lbl.Text = a_info
+        End If
     End Sub
 End Class
