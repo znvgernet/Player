@@ -166,7 +166,7 @@ Public Class Form1
         isResult = RegisterHotKey(Handle, 9, MOD_ALT + MOD_CONTROL, Asc("Q")) '注册Ctrl+Q的组合键，停止播放
         isResult = RegisterHotKey(Handle, 10, MOD_ALT + MOD_CONTROL, Asc("P")) '注册Ctrl+P的组合键，显示或隐藏进度条
         isResult = RegisterHotKey(Handle, 11, MOD_ALT + MOD_CONTROL, 32) '注册Ctrl+空格的组合键，播放或暂停
-        isResult = RegisterHotKey(Handle, 12, MOD_ALT + MOD_CONTROL, Asc("S"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
+        isResult = RegisterHotKey(Handle, 12, MOD_ALT + MOD_CONTROL, Asc("B"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
         isResult = RegisterHotKey(Handle, 13, MOD_ALT + MOD_CONTROL, Asc("E"))  '向上移动
         isResult = RegisterHotKey(Handle, 14, MOD_ALT + MOD_CONTROL, Asc("D"))  '向下移动
         isResult = RegisterHotKey(Handle, 15, MOD_ALT + MOD_CONTROL, Asc("U"))  '
@@ -673,6 +673,7 @@ Public Class Form1
 
     Private Sub currentsong(Optional cp As Integer = 0, Optional newit As Integer = -1)
         Try
+            AxWindowsMediaPlayer1.Ctlcontrols.stop()
             AxWindowsMediaPlayer1.URL = medialist(itmindex)
             Dim newitm As Integer = -1
             If System.IO.File.Exists(medialist(itmindex)) Then
@@ -700,6 +701,7 @@ Public Class Form1
 
     Private Sub nextsong1()
         Try
+            Dim olditm As Integer = itmindex
             Randomize()
             Dim kl As Integer
 1:
@@ -714,6 +716,7 @@ Public Class Form1
             ElseIf itmindex < 0 Then
                 itmindex = UBound(medialist)
             End If
+            setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
                 'AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
