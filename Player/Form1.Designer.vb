@@ -359,6 +359,8 @@ Partial Class Form1
         Me.显示状态栏ToolStripMenuItem.Checked = True
         Me.显示状态栏ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.显示状态栏ToolStripMenuItem.Name = "显示状态栏ToolStripMenuItem"
+        Me.显示状态栏ToolStripMenuItem.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.I), System.Windows.Forms.Keys)
         Me.显示状态栏ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
         Me.显示状态栏ToolStripMenuItem.Text = "显示状态栏"
         '
@@ -374,7 +376,7 @@ Partial Class Form1
         '
         Me.显示播放列表ToolStripMenuItem1.Name = "显示播放列表ToolStripMenuItem1"
         Me.显示播放列表ToolStripMenuItem1.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
-            Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
+            Or System.Windows.Forms.Keys.B), System.Windows.Forms.Keys)
         Me.显示播放列表ToolStripMenuItem1.Size = New System.Drawing.Size(279, 22)
         Me.显示播放列表ToolStripMenuItem1.Text = "显示播放列表"
         '
@@ -386,6 +388,8 @@ Partial Class Form1
         '通透模式ToolStripMenuItem
         '
         Me.通透模式ToolStripMenuItem.Name = "通透模式ToolStripMenuItem"
+        Me.通透模式ToolStripMenuItem.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.U), System.Windows.Forms.Keys)
         Me.通透模式ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
         Me.通透模式ToolStripMenuItem.Text = "通透模式"
         '
@@ -602,8 +606,8 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(428, 140)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel5)
-        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.PictureBox4)
+        Me.Controls.Add(Me.Panel3)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
         Me.Name = "Form1"

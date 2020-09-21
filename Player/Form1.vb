@@ -1145,23 +1145,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Sub showorhideprogress()
-        显示播放进度控制面板PToolStripMenuItem.Checked = Not 显示播放进度控制面板PToolStripMenuItem.Checked
-        Panel1.Visible = 显示播放进度控制面板PToolStripMenuItem.Checked
-        If 显示播放进度控制面板PToolStripMenuItem.Checked Then
-            If 显示状态栏ToolStripMenuItem.Checked Then
-                Panel3.Height = Panel2.Height + Panel1.Height
-            Else
-                Panel3.Height = Panel1.Height
-            End If
-        Else
-            If 显示状态栏ToolStripMenuItem.Checked Then
-                Panel3.Height = Panel2.Height
-            Else
-                Panel3.Height = 0
-            End If
-        End If
-    End Sub
+
 
     Function readplaylist() As String
         Try
@@ -1529,6 +1513,24 @@ Public Class Form1
         showorhidestatusbar()
     End Sub
 
+    Sub showorhideprogress()
+        显示播放进度控制面板PToolStripMenuItem.Checked = Not 显示播放进度控制面板PToolStripMenuItem.Checked
+        Panel1.Visible = 显示播放进度控制面板PToolStripMenuItem.Checked
+        If 显示播放进度控制面板PToolStripMenuItem.Checked Then
+            If 显示状态栏ToolStripMenuItem.Checked Then
+                Panel3.Height = Panel2.Height + Panel1.Height
+            Else
+                Panel3.Height = Panel1.Height
+            End If
+        Else
+            If 显示状态栏ToolStripMenuItem.Checked Then
+                Panel3.Height = Panel2.Height
+            Else
+                Panel3.Height = 0
+            End If
+        End If
+    End Sub
+
     Sub showorhidestatusbar()
         显示状态栏ToolStripMenuItem.Checked = Not 显示状态栏ToolStripMenuItem.Checked
         Panel2.Visible = 显示状态栏ToolStripMenuItem.Checked
@@ -1536,7 +1538,7 @@ Public Class Form1
             If 显示播放进度控制面板PToolStripMenuItem.Checked Then
                 Panel3.Height = Panel2.Height + Panel1.Height
             Else
-                Panel3.Height = Panel1.Height
+                Panel3.Height = Panel2.Height
             End If
         Else
             If 显示播放进度控制面板PToolStripMenuItem.Checked Then
