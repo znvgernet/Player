@@ -72,6 +72,7 @@ Public Class Form2
             End If
             Form1.setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Form1.AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 Form1.AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 Form1.AxWindowsMediaPlayer1.Ctlcontrols.play()
                 If Form1.停止循环ToolStripMenuItem.Checked = True Then
@@ -311,6 +312,7 @@ Public Class Form2
         DataGridView1.Refresh()
         saveplaylisttofile()
     End Sub
+
 
     Private Sub Form2_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         move_item_index = -1

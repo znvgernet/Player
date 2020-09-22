@@ -7,7 +7,8 @@ Imports System.Text.RegularExpressions
 
 
 Public Class Form1
-
+    Public me_base_width As Integer = 0
+    Public needmoveleft As Boolean = True
     Public lbl As New Label
     Public lbl_1 As New Label
     Public m_d As Boolean = False
@@ -20,7 +21,7 @@ Public Class Form1
     Public Current_play_name As String = ""
     Public is_show_lrc As Boolean = False
     Public lrc_array(,) As String
-
+    Public formautowidth As Boolean = False
     '===================================
     Public Const WM_HOTKEY = &H312
     Public Const MOD_ALT = &H1
@@ -55,6 +56,8 @@ Public Class Form1
                 tolastsong()
             Case "Q", "q" '停止播放
                 stopmedia()
+            Case "e", "E"
+                showerinfo()
         End Select
         'Console.WriteLine(Asc(e.KeyChar))
     End Sub
@@ -231,18 +234,18 @@ Public Class Form1
         'AddHandler lbl_1.MouseMove, AddressOf lbl_MouseClick
         'AddHandler lbl_1.MouseMove, AddressOf lbl_MouseEnter
         lbl.BackColor = Color.Transparent
-        lbl.AutoSize = False
-
+        lbl.AutoSize = True
+        'lbl.BorderStyle = BorderStyle.Fixed3D
         lbl.Height = 12
         Dim old As Padding = lbl.Margin
-        lbl.Margin = New Padding(old.Left, old.Top, old.Right, 5)
-        'lbl.Location = New System.Drawing.Point(5, 5)
+        lbl.Margin = New Padding(old.Left, 3, old.Right, 5)  'old.Top
+
+        lbl.Location = New System.Drawing.Point(5, 2)
         lbl.ForeColor = Color.White
         lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl.Font = New System.Drawing.Font(New FontFamily("宋体"), 9, FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         '"微软雅黑, 10.5pt"
         lbl.TextAlign = ContentAlignment.MiddleLeft
-
         lbl.Text = "Waiting..."
         lbl.AllowDrop = True
         AddHandler lbl.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
@@ -256,9 +259,10 @@ Public Class Form1
         Panel6.Controls.Add(lbl)
         Panel2.Controls.Add(lbl_1)
         lbl_1.Dock = DockStyle.Right
-        lbl.Dock = DockStyle.Top
-        Panel1.Visible = False
+        'lbl.Dock = DockStyle.Top
 
+        Panel1.Visible = False
+        me_base_width = Me.Width
         AxWindowsMediaPlayer1.Dock = DockStyle.Fill
         AxWindowsMediaPlayer1.uiMode = "none"
         'AxWindowsMediaPlayer1.Controls.Add(lbl)
@@ -518,8 +522,15 @@ Public Class Form1
             Current_play_name = ""
         Else
             lbl.Text = rts
+            If Me.lbl.Width > Me.Panel6.Width Then
+                Me.lbl.Left = Me.Panel6.Width
+            Else
+                Me.lbl.Left = 0
+            End If
             Current_play_name = rts
         End If
+        needmoveleft = True
+        Me.Width = me_base_width
         Show_lrc()
     End Sub
 
@@ -579,9 +590,12 @@ Public Class Form1
             setcurrentrow(itmindex, olditm)
             'AxWindowsMediaPlayer1.Ctlcontrols.stop()
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Timer1.Enabled = False
+                AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
+                Timer1.Enabled = True
                 getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True
@@ -609,10 +623,12 @@ Public Class Form1
             End If
             setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
-                'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+                Timer1.Enabled = False
+                AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
+                Timer1.Enabled = True
                 getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True
@@ -645,8 +661,11 @@ Public Class Form1
             End If
             setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Timer1.Enabled = False
+                AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
+                Timer1.Enabled = True
                 If 停止循环ToolStripMenuItem.Checked = True Then
                     isautoloop = False
                 Else
@@ -673,13 +692,16 @@ Public Class Form1
 
     Private Sub currentsong(Optional cp As Integer = 0, Optional newit As Integer = -1)
         Try
-            AxWindowsMediaPlayer1.Ctlcontrols.stop()
+
             AxWindowsMediaPlayer1.URL = medialist(itmindex)
             Dim newitm As Integer = -1
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Timer1.Enabled = False
+                AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = cp
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
+                Timer1.Enabled = True
                 getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True
@@ -718,10 +740,12 @@ Public Class Form1
             End If
             setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
-                'AxWindowsMediaPlayer1.Ctlcontrols.stop()
+                Timer1.Enabled = False
+                AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
+                Timer1.Enabled = True
                 getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True
@@ -746,10 +770,12 @@ Public Class Form1
             itmindex = UBound(medialist)
             setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Timer1.Enabled = False
                 AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
+                Timer1.Enabled = True
                 getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True
@@ -870,14 +896,20 @@ Public Class Form1
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
             If UBound(medialist) >= 0 Then
-                If isautoloop = True And (AxWindowsMediaPlayer1.playState = 8 Or AxWindowsMediaPlayer1.playState = 12 Or AxWindowsMediaPlayer1.playState = 10 Or AxWindowsMediaPlayer1.playState = 0 Or AxWindowsMediaPlayer1.playState = 7 Or AxWindowsMediaPlayer1.playState = 1) Then
-                    Select Case looptype
-                        Case 0
-                            currentsong()
-                        Case 1
-                            nextsong()
-                        Case 2
-                            nextsong1()
+                If isautoloop = True Then
+                    'And (AxWindowsMediaPlayer1.playState = 8 Or AxWindowsMediaPlayer1.playState = 12 Or AxWindowsMediaPlayer1.playState = 10 Or AxWindowsMediaPlayer1.playState = 0 Or AxWindowsMediaPlayer1.playState = 7 Or AxWindowsMediaPlayer1.playState = 1) 
+                    Select Case AxWindowsMediaPlayer1.playState
+                        Case 2, 3, 4, 5, 6, 9, 11
+
+                        Case Else
+                            Select Case looptype
+                                Case 0
+                                    currentsong()
+                                Case 1
+                                    nextsong()
+                                Case 2
+                                    nextsong1()
+                            End Select
                     End Select
                 End If
             End If
@@ -908,35 +940,38 @@ Public Class Form1
                 If AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString = "" Then
                     If (AxWindowsMediaPlayer1.currentMedia.durationString.ToString.Length) >= 5 Then
                         If is_show_lrc Then
-                            Me.Text = Current_play_name & " | 00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                            Me.Text = Current_play_name '& " | 00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         Else
                             Me.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         End If
 
-                        Label1.Text = Me.Text
+                        'Label1.Text = Me.Text
                         'lbl_1.Text = "00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     Else
                         If is_show_lrc Then
-                            Me.Text = Current_play_name & " | 00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                            Me.Text = Current_play_name '& " | 00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         Else
                             Me.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                         End If
-                        Label1.Text = Me.Text
+                        'Label1.Text = Me.Text
                         'lbl_1.Text = "00:00:00 | " & AxWindowsMediaPlayer1.currentMedia.durationString
                     End If
                 Else
                     If is_show_lrc Then
-                        Me.Text = Current_play_name & " | " & AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
+                        Me.Text = Current_play_name '& " | " & AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                     Else
                         Me.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString '& "|" & AxWindowsMediaPlayer1.playState
                     End If
-                    Label1.Text = Me.Text
+                    'Label1.Text = Me.Text
                     'lbl_1.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString & " | " & AxWindowsMediaPlayer1.currentMedia.durationString
                 End If
                 If AxWindowsMediaPlayer1.playState = 1 Then
                     Me.Text = "Player" '& "|" & isautoloop  '& "|" & AxWindowsMediaPlayer1.playState '"00:00 | 00:00"
                 End If
-                Label1.Text = Me.Text
+                showplaystatestr(Label1)
+                'If is_show_lrc = False Then
+                'lbl.Text = AxWindowsMediaPlayer1.currentMedia.getItemInfo("Author") & " - " & Current_play_name
+                'End If
             Else
                 Me.Text = "Player" '& "|" & isautoloop '& "|" & AxWindowsMediaPlayer1.playState
                 showplaystatestr(Label1)
@@ -953,36 +988,38 @@ Public Class Form1
     End Sub
 
     Public Sub showplaystatestr(ByVal lbl As Label)
+        'currentMedia.getItemInfo(const string); 获取当前媒体信息"Title"=媒体标题，"Author"=艺术家，"Copyright"=版权信息，"Description"=媒体内容描述，"Duration"=持续时间（秒），"FileSize"=文件大小，"FileType"=文件类型，"sourceURL"=原始地址 
         Select Case AxWindowsMediaPlayer1.playState
             Case 0
-                lbl.Text = "未定义状态"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|未定义状态"
             Case 1
-                lbl.Text = "停止"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|停止"
             Case 2
-                lbl.Text = "暂停"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|暂停|" & AxWindowsMediaPlayer1.currentMedia.getItemInfo("Author")
             Case 3
-                lbl.Text = "播放"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|播放|" & AxWindowsMediaPlayer1.currentMedia.getItemInfo("Author")
             Case 4
-                lbl.Text = "ScanForward"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|ScanForward"
             Case 5
-                lbl.Text = "ScanReverse"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|ScanReverse"
             Case 6
-                lbl.Text = "Buffering"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Buffering"
             Case 7
-                lbl.Text = "Waiting"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Waiting"
             Case 8
-                lbl.Text = "MediaEnded"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|MediaEnded"
             Case 9
-                lbl.Text = "Transitioning"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Transitioning"
             Case 10
-                lbl.Text = "Ready"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Ready"
             Case 11
-                lbl.Text = "Reconnecting"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Reconnecting"
             Case 12
-                lbl.Text = "Last"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|Last"
             Case Else
-                lbl.Text = "未知"
+                lbl.Text = AxWindowsMediaPlayer1.playState & "|未知"
         End Select
+
     End Sub
 
     Private Sub 始终置顶ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 始终置顶ToolStripMenuItem.Click
@@ -1156,9 +1193,9 @@ Public Class Form1
             Dim str As String = ""
             For i As Integer = 0 To UBound(fls)
                 If str = "" Then
-                    str = fls(i).ToString.Trim
+                    str = DecryptDes(fls(i).ToString.Trim, key_str, iv_str)
                 Else
-                    str = str & "|" & fls(i).ToString.Trim
+                    str = str & "|" & DecryptDes(fls(i).ToString.Trim, key_str, iv_str)
                 End If
             Next
             readplaylist = str
@@ -1507,6 +1544,16 @@ Public Class Form1
         Else
             Me.TransparencyKey = Nothing
         End If
+
+    End Sub
+
+    Private Sub showerinfo()
+        If Panel5.Visible Then
+            Panel5.Visible = False
+        Else
+            Panel5.Visible = True
+        End If
+
     End Sub
 
     Private Sub 显示状态栏ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 显示状态栏ToolStripMenuItem.Click
@@ -1631,6 +1678,32 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub Timer7_Tick(sender As Object, e As EventArgs) Handles Timer7.Tick
+        'On Error Resume Next
+        Try
+            If is_show_lrc = False Then
+                If Me.lbl.Width > Me.Panel6.Width Then
+                    If Me.lbl.Left <= -Me.lbl.Width Then
+                        Me.lbl.Left = Me.Panel6.Width
+                    End If
+                    Me.lbl.Left = Me.lbl.Left - 1.5
+                Else
+                    Me.lbl.Left = 0
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub 窗体宽度随字幕宽度自动调整ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 窗体宽度随字幕宽度自动调整ToolStripMenuItem.Click
+        窗体宽度随字幕宽度自动调整ToolStripMenuItem.Checked = Not 窗体宽度随字幕宽度自动调整ToolStripMenuItem.Checked
+        formautowidth = 窗体宽度随字幕宽度自动调整ToolStripMenuItem.Checked
+        If formautowidth = False Then
+            Me.Width = me_base_width
+        End If
+    End Sub
+
     Private Sub start_show_lrc(ByVal lrc_ary As Array, ByVal cnt As Integer)
         Dim kl
         Dim mm
@@ -1653,6 +1726,16 @@ Public Class Form1
         Next
         If a_info <> "" Then
             lbl.Text = a_info
+            Me.lbl.Left = 0
+            If formautowidth Then
+                Dim kwidth As Integer = 0
+                kwidth = Me.lbl.Width + Me.Panel2.Width - Me.Panel6.Width + 15
+                If kwidth > me_base_width Then
+                    Me.Width = kwidth
+                Else
+                    Me.Width = me_base_width
+                End If
+            End If
         End If
     End Sub
 End Class

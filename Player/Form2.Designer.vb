@@ -220,7 +220,7 @@ Partial Class Form2
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.从播放列表中删除ToolStripMenuItem, Me.ToolStripMenuItem1, Me.向上移动ToolStripMenuItem, Me.向下移动ToolStripMenuItem, Me.ToolStripMenuItem2, Me.清空播放列表ToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(184, 126)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(184, 104)
         '
         '从播放列表中删除ToolStripMenuItem
         '

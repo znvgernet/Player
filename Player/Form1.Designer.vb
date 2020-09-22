@@ -93,7 +93,9 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Timer6 = New System.Windows.Forms.Timer(Me.components)
+        Me.Timer7 = New System.Windows.Forms.Timer(Me.components)
         Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -116,7 +118,7 @@ Partial Class Form1
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ToolStripMenuItem3, Me.播放暂停ToolStripMenuItem, Me.停止ToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripMenuItem7, Me.ToolStripSeparator1, Me.第一个ToolStripMenuItem, Me.上一个节目ToolStripMenuItem, Me.下一个节目ToolStripMenuItem, Me.最后一个节目ToolStripMenuItem, Me.ToolStripMenuItem4, Me.单个循环ToolStripMenuItem, Me.ToolStripMenuItem5, Me.ToolStripMenuItem9, Me.媒体声道ToolStripMenuItem, Me.ToolStripMenuItem8, Me.显示播放列表ToolStripMenuItem, Me.ToolStripMenuItem10, Me.ToolStripSeparator2, Me.窗口置顶ToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(226, 354)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(226, 376)
         '
         'ToolStripMenuItem2
         '
@@ -337,7 +339,7 @@ Partial Class Form1
         '
         '显示播放列表ToolStripMenuItem
         '
-        Me.显示播放列表ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.窗体无框模式ToolStripMenuItem, Me.ToolStripMenuItem11, Me.显示状态栏ToolStripMenuItem, Me.显示播放进度控制面板PToolStripMenuItem, Me.显示播放列表ToolStripMenuItem1, Me.ToolStripMenuItem16, Me.通透模式ToolStripMenuItem})
+        Me.显示播放列表ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.窗体无框模式ToolStripMenuItem, Me.ToolStripMenuItem11, Me.显示状态栏ToolStripMenuItem, Me.显示播放进度控制面板PToolStripMenuItem, Me.显示播放列表ToolStripMenuItem1, Me.ToolStripMenuItem16, Me.通透模式ToolStripMenuItem, Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem})
         Me.显示播放列表ToolStripMenuItem.Name = "显示播放列表ToolStripMenuItem"
         Me.显示播放列表ToolStripMenuItem.Size = New System.Drawing.Size(225, 22)
         Me.显示播放列表ToolStripMenuItem.Text = "显示"
@@ -507,7 +509,7 @@ Partial Class Form1
         Me.Panel6.Location = New System.Drawing.Point(25, 9)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Panel6.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
         Me.Panel6.Size = New System.Drawing.Size(102, 12)
         Me.Panel6.TabIndex = 0
         '
@@ -526,7 +528,7 @@ Partial Class Form1
         Me.Panel3.Location = New System.Drawing.Point(12, 103)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(200, 35)
+        Me.Panel3.Size = New System.Drawing.Size(382, 35)
         Me.Panel3.TabIndex = 12
         '
         'PictureBox4
@@ -544,7 +546,7 @@ Partial Class Form1
         'Panel4
         '
         Me.Panel4.Controls.Add(Me.AxWindowsMediaPlayer1)
-        Me.Panel4.Location = New System.Drawing.Point(147, 35)
+        Me.Panel4.Location = New System.Drawing.Point(159, 34)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(200, 62)
         Me.Panel4.TabIndex = 13
@@ -554,7 +556,7 @@ Partial Class Form1
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel5.Controls.Add(Me.Label2)
         Me.Panel5.Controls.Add(Me.Label1)
-        Me.Panel5.Location = New System.Drawing.Point(69, 13)
+        Me.Panel5.Location = New System.Drawing.Point(81, 12)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(200, 20)
         Me.Panel5.TabIndex = 14
@@ -586,6 +588,10 @@ Partial Class Form1
         '
         Me.Timer6.Interval = 1
         '
+        'Timer7
+        '
+        Me.Timer7.Enabled = True
+        '
         'AxWindowsMediaPlayer1
         '
         Me.AxWindowsMediaPlayer1.AllowDrop = True
@@ -598,12 +604,18 @@ Partial Class Form1
         Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
         Me.AxWindowsMediaPlayer1.TabIndex = 11
         '
+        '窗体宽度随字幕宽度自动调整ToolStripMenuItem
+        '
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Name = "窗体宽度随字幕宽度自动调整ToolStripMenuItem"
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Text = "窗体宽度随字幕宽度自动调整"
+        '
         'Form1
         '
         Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(428, 140)
+        Me.ClientSize = New System.Drawing.Size(316, 147)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel5)
         Me.Controls.Add(Me.PictureBox4)
@@ -699,4 +711,6 @@ Partial Class Form1
     Friend WithEvents 通透模式ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 显示状态栏ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Timer6 As Timer
+    Friend WithEvents Timer7 As Timer
+    Friend WithEvents 窗体宽度随字幕宽度自动调整ToolStripMenuItem As ToolStripMenuItem
 End Class
