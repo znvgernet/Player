@@ -69,6 +69,7 @@ Partial Class Form1
         Me.显示播放列表ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripSeparator()
         Me.通透模式ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.窗口置顶ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -89,13 +90,12 @@ Partial Class Form1
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Timer6 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer7 = New System.Windows.Forms.Timer(Me.components)
-        Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
-        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -105,8 +105,8 @@ Partial Class Form1
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
-        Me.Panel5.SuspendLayout()
         CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel5.SuspendLayout()
         Me.SuspendLayout()
         '
         'Timer1
@@ -118,7 +118,7 @@ Partial Class Form1
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ToolStripMenuItem3, Me.播放暂停ToolStripMenuItem, Me.停止ToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripMenuItem7, Me.ToolStripSeparator1, Me.第一个ToolStripMenuItem, Me.上一个节目ToolStripMenuItem, Me.下一个节目ToolStripMenuItem, Me.最后一个节目ToolStripMenuItem, Me.ToolStripMenuItem4, Me.单个循环ToolStripMenuItem, Me.ToolStripMenuItem5, Me.ToolStripMenuItem9, Me.媒体声道ToolStripMenuItem, Me.ToolStripMenuItem8, Me.显示播放列表ToolStripMenuItem, Me.ToolStripMenuItem10, Me.ToolStripSeparator2, Me.窗口置顶ToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(226, 376)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(226, 354)
         '
         'ToolStripMenuItem2
         '
@@ -395,6 +395,12 @@ Partial Class Form1
         Me.通透模式ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
         Me.通透模式ToolStripMenuItem.Text = "通透模式"
         '
+        '窗体宽度随字幕宽度自动调整ToolStripMenuItem
+        '
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Name = "窗体宽度随字幕宽度自动调整ToolStripMenuItem"
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
+        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Text = "窗体宽度随字幕宽度自动调整"
+        '
         'ToolStripMenuItem10
         '
         Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
@@ -473,7 +479,7 @@ Partial Class Form1
         'PictureBox1
         '
         Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Left
-        Me.PictureBox1.Image = Global.Player.My.Resources.Resources.q_011
+        Me.PictureBox1.Image = Global.Player.My.Resources.Resources.q_012
         Me.PictureBox1.Location = New System.Drawing.Point(3, 3)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(2, 8)
@@ -551,6 +557,18 @@ Partial Class Form1
         Me.Panel4.Size = New System.Drawing.Size(200, 62)
         Me.Panel4.TabIndex = 13
         '
+        'AxWindowsMediaPlayer1
+        '
+        Me.AxWindowsMediaPlayer1.AllowDrop = True
+        Me.AxWindowsMediaPlayer1.ContextMenuStrip = Me.ContextMenuStrip1
+        Me.AxWindowsMediaPlayer1.Enabled = True
+        Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(0, 27)
+        Me.AxWindowsMediaPlayer1.Margin = New System.Windows.Forms.Padding(2)
+        Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
+        Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
+        Me.AxWindowsMediaPlayer1.TabIndex = 11
+        '
         'Panel5
         '
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -592,24 +610,6 @@ Partial Class Form1
         '
         Me.Timer7.Enabled = True
         '
-        'AxWindowsMediaPlayer1
-        '
-        Me.AxWindowsMediaPlayer1.AllowDrop = True
-        Me.AxWindowsMediaPlayer1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.AxWindowsMediaPlayer1.Enabled = True
-        Me.AxWindowsMediaPlayer1.Location = New System.Drawing.Point(0, 27)
-        Me.AxWindowsMediaPlayer1.Margin = New System.Windows.Forms.Padding(2)
-        Me.AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
-        Me.AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.AxWindowsMediaPlayer1.Size = New System.Drawing.Size(198, 16)
-        Me.AxWindowsMediaPlayer1.TabIndex = 11
-        '
-        '窗体宽度随字幕宽度自动调整ToolStripMenuItem
-        '
-        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Name = "窗体宽度随字幕宽度自动调整ToolStripMenuItem"
-        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Size = New System.Drawing.Size(279, 22)
-        Me.窗体宽度随字幕宽度自动调整ToolStripMenuItem.Text = "窗体宽度随字幕宽度自动调整"
-        '
         'Form1
         '
         Me.AllowDrop = True
@@ -635,8 +635,8 @@ Partial Class Form1
         Me.Panel3.ResumeLayout(False)
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
-        Me.Panel5.ResumeLayout(False)
         CType(Me.AxWindowsMediaPlayer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel5.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

@@ -72,6 +72,7 @@ Public Class Form2
             End If
             Form1.setcurrentrow(itmindex, olditm)
             If System.IO.File.Exists(medialist(itmindex)) Then
+                Form1.Timer1.Enabled = False
                 Form1.AxWindowsMediaPlayer1.Ctlcontrols.stop()
                 Form1.AxWindowsMediaPlayer1.URL = medialist(itmindex)
                 Form1.AxWindowsMediaPlayer1.Ctlcontrols.play()
@@ -81,6 +82,7 @@ Public Class Form2
                     Form1.isautoloop = True
                 End If
                 Form1.setmute()
+                Form1.Timer1.Enabled = True
                 Form1.getfilename(medialist(itmindex))
                 If playistopmost Then
                     Me.TopMost = True

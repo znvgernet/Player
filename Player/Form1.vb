@@ -692,13 +692,17 @@ Public Class Form1
 
     Private Sub currentsong(Optional cp As Integer = 0, Optional newit As Integer = -1)
         Try
-
-            AxWindowsMediaPlayer1.URL = medialist(itmindex)
+            If newit <> -1 Then
+                itmindex = newit
+            End If
             Dim newitm As Integer = -1
             If System.IO.File.Exists(medialist(itmindex)) Then
                 Timer1.Enabled = False
                 AxWindowsMediaPlayer1.Ctlcontrols.stop()
-                AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = cp
+                AxWindowsMediaPlayer1.URL = medialist(itmindex)
+                If cp > 0 Then
+                    AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = cp
+                End If
                 AxWindowsMediaPlayer1.Ctlcontrols.play()
                 setmute()
                 Timer1.Enabled = True
@@ -715,7 +719,6 @@ Public Class Form1
                 Deleteitemfromarray(itmindex)
                 currentsong(, newitm)
             End If
-
         Catch ex As Exception
 
         End Try
