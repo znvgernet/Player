@@ -609,6 +609,7 @@ Partial Class Form1
         'Timer7
         '
         Me.Timer7.Enabled = True
+        Me.Timer7.Interval = 31
         '
         'Form1
         '

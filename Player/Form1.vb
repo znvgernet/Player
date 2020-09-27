@@ -1543,6 +1543,7 @@ Public Class Form1
     Private Sub 通透模式ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 通透模式ToolStripMenuItem.Click
         通透模式ToolStripMenuItem.Checked = Not 通透模式ToolStripMenuItem.Checked
         If 通透模式ToolStripMenuItem.Checked = True Then
+
             Me.TransparencyKey = Color.Black
         Else
             Me.TransparencyKey = Nothing
@@ -1689,7 +1690,7 @@ Public Class Form1
                     If Me.lbl.Left <= -Me.lbl.Width Then
                         Me.lbl.Left = Me.Panel6.Width
                     End If
-                    Me.lbl.Left = Me.lbl.Left - 1.5
+                    Me.lbl.Left = Me.lbl.Left - 1
                 Else
                     Me.lbl.Left = 0
                 End If
