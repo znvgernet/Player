@@ -1613,8 +1613,9 @@ Public Class Form1
         Dim line As String = ""
         If System.IO.File.Exists(l_str) Then
             'TextBox1.Text = ""
+
             'TextBox2.Text = ""
-            Dim sr As StreamReader = New StreamReader(l_str, System.Text.Encoding.UTF8)
+            Dim sr As StreamReader = New StreamReader(l_str, System.Text.Encoding.GetEncoding("Gb2312"))
             Dim rgx As Regex = New Regex("^\[[0-9]")
             Dim rgx1 As Regex = New Regex("^\[[a-zA-Z]")
             Dim kl
@@ -1626,6 +1627,7 @@ Public Class Form1
             Do While sr.Peek() > 0
                 line = sr.ReadLine
                 If Trim(line & "") <> "" Then
+                    'TextBox1.AppendText(line & vbCrLf)
                     '歌曲信息部分，包括offset
                     If rgx1.Match(line).Success Then
                         'pianyi
@@ -1634,7 +1636,7 @@ Public Class Form1
                         tmp = tmp_1.Split(":")
                         Select Case LCase(tmp(0) & "")
                             Case "offset"
-                                offset_value = tmp(1) / 1000
+                                offset_value = CDbl("0." & tmp(1))
                         End Select
                     End If
                     '歌词部分
@@ -1662,6 +1664,7 @@ Public Class Form1
                 op = Split(pl(j), "[xhb]")
                 lrc_array(j, 0) = op(0)
                 lrc_array(j, 1) = op(1)
+                'TextBox1.AppendText(op(0) & ":" & op(1) & vbCrLf)
             Next
             If line_count > 0 Then
                 is_show_lrc = True
@@ -1718,9 +1721,18 @@ Public Class Form1
             mm = Split(kl(0), ":")
             Select Case UBound(mm)
                 Case 1
-                    c_t_in = Int(mm(0)) * 60 + Int(mm(1)) + (kl(UBound(kl)) / 100)
+                    If UBound(kl) = 1 Then
+                        c_t_in = Int(mm(0)) * 60 + Int(mm(1)) + CDbl("0." & kl(UBound(kl)))
+                    Else
+                        c_t_in = Int(mm(0)) * 60 + Int(mm(1))
+                    End If
+
                 Case 2
-                    c_t_in = Int(mm(0)) * 3600 + Int(mm(1)) * 60 + Int(mm(2)) + (kl(UBound(kl)) / 100)
+                    If UBound(kl) = 1 Then
+                        c_t_in = Int(mm(0)) * 3600 + Int(mm(1)) * 60 + Int(mm(2)) + CDbl("0." & kl(UBound(kl)))
+                    Else
+                        c_t_in = Int(mm(0)) * 3600 + Int(mm(1)) * 60 + Int(mm(2))
+                    End If
             End Select
             c_t_in = c_t_in + offset_value
             If (c_t_in) = (cnt) Then
