@@ -4,6 +4,7 @@ Imports System.Threading.Thread
 Imports AxWMPLib
 Imports System.IO
 Imports System.Text.RegularExpressions
+Imports System.Text
 
 
 Public Class Form1
@@ -22,6 +23,7 @@ Public Class Form1
     Public is_show_lrc As Boolean = False
     Public lrc_array(,) As String
     Public formautowidth As Boolean = False
+    Public lrc_coder As Encoding
     '===================================
     Public Const WM_HOTKEY = &H312
     Public Const MOD_ALT = &H1
@@ -108,6 +110,14 @@ Public Class Form1
                     End If
                 Case 16
                     showorhidestatusbar()
+                Case 17
+                    setloop(0)
+                Case 18
+                    setloop(1)
+                Case 19
+                    setloop(2)
+                Case 20
+                    setloop(3)
             End Select
         End If
         MyBase.WndProc(m)
@@ -155,6 +165,10 @@ Public Class Form1
         UnRegisterHotKey(Handle, 14)
         UnRegisterHotKey(Handle, 15)
         UnRegisterHotKey(Handle, 16)
+        UnRegisterHotKey(Handle, 17)
+        UnRegisterHotKey(Handle, 18)
+        UnRegisterHotKey(Handle, 19)
+        UnRegisterHotKey(Handle, 20)
         '注册热键ctrl + T
         Dim isResult As Boolean
         isResult = RegisterHotKey(Handle, 0, MOD_ALT + MOD_CONTROL, Asc("M")) '注册Ctrl+M的组合键，静音
@@ -172,8 +186,13 @@ Public Class Form1
         isResult = RegisterHotKey(Handle, 12, MOD_ALT + MOD_CONTROL, Asc("B"))  '注册Ctrl+S的组合键，显示或隐藏播放列表
         isResult = RegisterHotKey(Handle, 13, MOD_ALT + MOD_CONTROL, Asc("E"))  '向上移动
         isResult = RegisterHotKey(Handle, 14, MOD_ALT + MOD_CONTROL, Asc("D"))  '向下移动
-        isResult = RegisterHotKey(Handle, 15, MOD_ALT + MOD_CONTROL, Asc("U"))  '
-        isResult = RegisterHotKey(Handle, 16, MOD_ALT + MOD_CONTROL, Asc("I"))  '
+        isResult = RegisterHotKey(Handle, 15, MOD_ALT + MOD_CONTROL, Asc("U"))  '主窗口开启和关闭透明模式
+        isResult = RegisterHotKey(Handle, 16, MOD_ALT + MOD_CONTROL, Asc("I"))  '显示和隐藏状态栏
+
+        isResult = RegisterHotKey(Handle, 17, MOD_CONTROL, Asc("1"))  '单曲循环
+        isResult = RegisterHotKey(Handle, 18, MOD_CONTROL, Asc("2"))  '有序循环
+        isResult = RegisterHotKey(Handle, 19, MOD_CONTROL, Asc("3"))  '无序循环
+        isResult = RegisterHotKey(Handle, 20, MOD_CONTROL, Asc("4"))  '停止循环
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -192,11 +211,17 @@ Public Class Form1
         UnRegisterHotKey(Handle, 12)
         UnRegisterHotKey(Handle, 13)
         UnRegisterHotKey(Handle, 14)
+        UnRegisterHotKey(Handle, 15)
+        UnRegisterHotKey(Handle, 16)
+        UnRegisterHotKey(Handle, 17)
+        UnRegisterHotKey(Handle, 18)
+        UnRegisterHotKey(Handle, 19)
+        UnRegisterHotKey(Handle, 20)
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim str As String = "E:\movie\舞出我人生4-MP4\舞出我人生4A.mp4"
-
+        Dim str As String = "" 'E:\movie\舞出我人生4-MP4\舞出我人生4A.mp4
+        lrc_coder = Encoding.GetEncoding("gb2312")
         sethotkey(0)
         'SplitContainer1.Height = 26
         'SplitContainer1.Dock = DockStyle.Bottom
@@ -218,12 +243,23 @@ Public Class Form1
         Panel2.Dock = DockStyle.Bottom
         'Panel2.Height = 20
         lbl_1.BackColor = Color.Transparent
-        lbl_1.Cursor = System.Windows.Forms.Cursors.SizeAll
+        'lbl_1.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl_1.AutoSize = False
         lbl_1.ForeColor = Color.White
         lbl_1.Height = 20
         lbl_1.TextAlign = ContentAlignment.MiddleRight
         lbl_1.Width = 100
+
+        lbl.AllowDrop = True
+        AddHandler lbl.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
+        AddHandler lbl.DragDrop, AddressOf LB_DragDrop '委托数据处理事件
+
+        Panel6.AllowDrop = True
+        'Panel6.Cursor = System.Windows.Forms.Cursors.SizeAll
+        AddHandler Panel6.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
+        AddHandler Panel6.DragDrop, AddressOf LB_DragDrop '委托数据处理事件
+        AddHandler Panel6.MouseDown, AddressOf lbl_MouseDown '委托拖放数据事件
+        AddHandler Panel6.MouseMove, AddressOf lbl_MouseMove '委托数据处理事件
 
         lbl_1.AllowDrop = True
         AddHandler lbl_1.DragEnter, AddressOf LB_DragEnter '委托拖放数据事件
@@ -242,7 +278,7 @@ Public Class Form1
 
         lbl.Location = New System.Drawing.Point(5, 2)
         lbl.ForeColor = Color.White
-        lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
+        'lbl.Cursor = System.Windows.Forms.Cursors.SizeAll
         lbl.Font = New System.Drawing.Font(New FontFamily("宋体"), 9, FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         '"微软雅黑, 10.5pt"
         lbl.TextAlign = ContentAlignment.MiddleLeft
@@ -344,7 +380,7 @@ Public Class Form1
             '添加到表
             Dim testFile As New System.IO.FileInfo(s)
             Select Case UCase(testFile.Extension)
-                Case ".MP3", ".M4A", ".MP4", ".WMV", ".MPG", ".MPEG", ".MOV", ".AVI", ".RM", ".RMVB", ".RMB", ".MKV", ".WAV", ".WMA", ".DAT"
+                Case ".MP3", ".FLAC", ".M4A", ".MP4", ".WMV", ".MPG", ".MPEG", ".MOV", ".AVI", ".RM", ".RMVB", ".RMB", ".MKV", ".WAV", ".WMA", ".DAT"
                     If checkrepeat(s) Then
                     Else
                         klist.Items.Add(s)
@@ -1605,7 +1641,17 @@ Public Class Form1
         saveplaylisttofile()
     End Sub
 
+    Function gettxtcode(ByVal filepath As String) As Encoding
+        Dim fs As System.IO.FileStream = New System.IO.FileStream("d:\1111.txt", IO.FileMode.Open)
 
+        Dim sr As System.IO.StreamReader = New System.IO.StreamReader(fs)
+        Dim txtEncode As System.Text.Encoding = sr.CurrentEncoding
+        sr.Close()
+        sr.Dispose()
+        fs.Close()
+        fs.Dispose()
+        Return txtEncode
+    End Function
 
     Private Sub Show_lrc()
         Dim m_str = Split(medialist(itmindex), ".")
@@ -1613,9 +1659,11 @@ Public Class Form1
         Dim line As String = ""
         If System.IO.File.Exists(l_str) Then
             'TextBox1.Text = ""
-
+            'GetEncoding("Gb2312")
+            'UTF8
             'TextBox2.Text = ""
-            Dim sr As StreamReader = New StreamReader(l_str, System.Text.Encoding.GetEncoding("Gb2312"))
+            'System.Text.Encoding.GetEncoding("Gb2312")
+            Dim sr As StreamReader = New StreamReader(l_str, lrc_coder)
             Dim rgx As Regex = New Regex("^\[[0-9]")
             Dim rgx1 As Regex = New Regex("^\[[a-zA-Z]")
             Dim kl
@@ -1636,7 +1684,7 @@ Public Class Form1
                         tmp = tmp_1.Split(":")
                         Select Case LCase(tmp(0) & "")
                             Case "offset"
-                                offset_value = CDbl("0." & tmp(1))
+                                offset_value = CDbl(tmp(1) / 1000)
                         End Select
                     End If
                     '歌词部分
@@ -1711,6 +1759,40 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub GB2312ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GB2312ToolStripMenuItem.Click
+        choselrccode(1)
+    End Sub
+
+    Private Sub choselrccode(ByVal code_type As Integer)
+        Select Case code_type
+            Case 1
+                GB2312ToolStripMenuItem.Checked = True
+                UTFToolStripMenuItem.Checked = False
+                UnicodeToolStripMenuItem.Checked = False
+                lrc_coder = Encoding.GetEncoding("GB2312")
+            Case 2
+                GB2312ToolStripMenuItem.Checked = False
+                UTFToolStripMenuItem.Checked = True
+                UnicodeToolStripMenuItem.Checked = False
+                lrc_coder = Encoding.UTF8
+            Case 3
+                GB2312ToolStripMenuItem.Checked = False
+                UTFToolStripMenuItem.Checked = False
+                UnicodeToolStripMenuItem.Checked = True
+                lrc_coder = Encoding.Unicode
+        End Select
+        Show_lrc()
+        lbl.Text = ""
+    End Sub
+
+    Private Sub UTFToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UTFToolStripMenuItem.Click
+        choselrccode(2)
+    End Sub
+
+    Private Sub UnicodeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnicodeToolStripMenuItem.Click
+        choselrccode(3)
+    End Sub
+
     Private Sub start_show_lrc(ByVal lrc_ary As Array, ByVal cnt As Integer)
         Dim kl
         Dim mm
@@ -1750,6 +1832,7 @@ Public Class Form1
                     Me.Width = kwidth
                 Else
                     Me.Width = me_base_width
+
                 End If
             End If
         End If
